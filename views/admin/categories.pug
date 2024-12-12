@@ -1,0 +1,23 @@
+extends base
+block content 
+    .flex.gap-x-5.flex-col(class='lg:flex-row')
+        .w-full(class='md:w-1/2')
+            form.category-form
+                .mb-4
+                    label.block.text-gray-700.text-sm.font-bold.mb-2(for='cat_title') Add Category
+                    input( required class='bg-[#f0f0f0] focus:outline-0 focus:border-primary' type='text' name='cat_title' id='cat_title').inline-block.w-full.px-4.py-2.border.border-transparent.rounded.transition-all.duration-100
+                .mb-4
+                    button.category-btn.inline-flex.items-center.gap-x-2.transition-all.duration-100.bg-primary.rounded.cursor-pointer.text-white.py-2.px-4(class='hover:bg-primary-light')  Add Category 
+        .w-full(class='md:w-1/2')
+            table.w-full.border.border-collapse.border-gray-200.text-center
+                thead
+                    tr
+                        th.px-4.py-2 Category Title
+                        th.px-4.py-2 Action
+                tbody
+                    each category in categories 
+                        tr.border(class='hover:bg-gray-100')
+                            td.px-4.py-2.border.capitalize=category.name
+                            td.px-4.py-2.border
+                                button.py-1.px-2.text-red-500
+                                    i.fas.fa-trash-alt

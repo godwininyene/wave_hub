@@ -1,0 +1,117 @@
+footer(class='bg-dark pt-20 sticky bottom-0')
+    div(class="max-w-[1140px] w-11/12 mx-auto")
+        div(class="row  flex flex-col lg:flex-row")
+            //- About Start
+            div(class='w-full lg:w-2/4 px-4 flex-shrink-0')
+                div(class='content mb-4 lg:mb-0')
+                    a( href="" class='block text-left mb-6')
+                        img( src='/images/logo.png' class='w-auto h-24 inline')
+                    p(class='text-xs leading-6 text-white text-left')
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, 
+                        sed do eiusmod tempor incididunt ut labore et dolore 
+                        magna aliqua. Eaque ipsa quae ab illo inventore veritatis et quasi architecto.
+                    div(class='mt-6')
+                        ul(class="flex gap-x-2 ml-auto items-center")
+                            li
+                                a(href="" class="bg-primary text-xs inline-block text-center w-8 h-8 leading-8 text-white rounded transition-all duration-100 hover:bg-primary-light")
+                                    i(class="fa-brands fa-facebook")
+
+                            li
+                                a(href="" class="bg-primary text-xs inline-block text-center w-8 h-8 leading-8 text-white rounded transition-all duration-100 hover:bg-primary-light")
+                                    i(class="fa-brands fa-twitter")
+                            li
+                                a(href="" class="bg-primary text-xs inline-block text-center w-8 h-8 leading-8 text-white rounded transition-all duration-100 hover:bg-primary-light")
+                                    i(class="fa-brands fa-instagram")
+                            li
+                                a(href="" class="bg-primary text-xs inline-block text-center w-8 h-8 leading-8 text-white rounded transition-all duration-100 hover:bg-primary-light")
+                                    i(class="fa-brands fa-pinterest")        
+            //- About End 
+
+            //- Categoreies Start 
+            //- div(class='px-4 w-full lg:w-1/6 flex-shrink-0')
+            //-     div(class='content mb-4 lg:mb-0')
+            //-         h3(class='text-left font-semibold text-white mb-5 pb-5 border-b border-b-slate-200') Categories
+            //-         nav(class='footer-nav')
+            //-             ul(class='footer-nav-list list-none')
+            //-                 li(class='text-left mb-3 pl-5 text-sm font-semibold relative group')
+            //-                     i(class='fas fa-caret-right text-primary absolute left-0 top-[4px] transition-all duration-300 ease-linear group-hover:left-[4px]')
+            //-                     a(href='' class="text-[#B6B6B6] transition-all duration-300 hover:text-slate-100") Sport
+            //-                 li(class='text-left mb-3 pl-5 text-sm font-semibold relative group')
+            //-                     i(class='fas fa-caret-right text-primary absolute left-0 top-[4px] transition-all duration-300 ease-linear group-hover:left-[4px]')
+            //-                     a(href='' class="text-[#B6B6B6] transition-all duration-300 hover:text-slate-100") Politics
+            //-                 li(class='text-left mb-3 pl-5 text-sm font-semibold relative group')
+            //-                     i(class='fas fa-caret-right text-primary absolute left-0 top-[4px] transition-all duration-300 ease-linear group-hover:left-[4px]')
+            //-                     a(href='' class="text-[#B6B6B6] transition-all duration-300 hover:text-slate-100") Politics
+            //-                 li(class='text-left mb-3 pl-5 text-sm font-semibold relative group')
+            //-                     i(class='fas fa-caret-right text-primary absolute left-0 top-[4px] transition-all duration-300 ease-linear group-hover:left-[4px]')
+            //-                     a(href='' class="text-[#B6B6B6] transition-all duration-300 hover:text-slate-100") Politics
+
+            //-             //- {
+            //-             //-     categories.map(cat=>(
+            //-             //-         <li key={cat.cat_id}(class='text-left mb-3 pl-5 text-sm font-semibold relative group'>
+            //-             //-             <FaCaretRight(class='text-primary absolute left-0 top-[4px] transition-all duration-300 ease-linear group-hover:left-[4px]' />
+            //-             //-             <a href={`posts/category/${cat.cat_title}`}(class="text-[#B6B6B6] transition-all duration-300 hover:text-slate-100">{cat.cat_title}</NavLink>
+            //-             //-         </li>
+            //-             //-     ))
+            //-             //- }
+
+            //- Categoreies End
+
+            //- Quick Links Start 
+            div(class='px-4 w-full lg:w-2/4 flex-shrink-0')
+                div(class='content mb-4 lg:mb-0')
+                    h3(class='text-left font-semibold text-white mb-5 pb-5 border-b border-b-slate-200') Quick Links
+                    nav(class='footer-nav')
+                        ul(class='footer-nav-list list-none')
+                            li(class='text-left mb-3 pl-5 text-sm font-semibold relative group')
+                                i(class='fas fa-caret-right text-primary absolute left-0 top-[4px] transition-all duration-300 ease-linear group-hover:left-[4px]')
+                                a(href='/' class="text-[#B6B6B6] transition-all duration-300 hover:text-slate-100") Home
+                            li(class='text-left mb-3 pl-5 text-sm font-semibold relative group')
+                                i(class='fas fa-caret-right text-primary absolute left-0 top-[4px] transition-all duration-300 ease-linear group-hover:left-[4px]')
+                                a(href='/about' class="text-[#B6B6B6] transition-all duration-300 hover:text-slate-100") About
+                            //- li(class='text-left mb-3 pl-5 text-sm font-semibold relative group')
+                            //-     i(class='fas fa-caret-right text-primary absolute left-0 top-[4px] transition-all duration-300 ease-linear group-hover:left-[4px]')
+                            //-     a(href='/contact' class="text-[#B6B6B6] transition-all duration-300 hover:text-slate-100") Contact
+                            li(class='text-left mb-3 pl-5 text-sm font-semibold relative group')
+                                i(class='fas fa-caret-right text-primary absolute left-0 top-[4px] transition-all duration-300 ease-linear group-hover:left-[4px]')
+                                a(href='' class="text-[#B6B6B6] transition-all duration-300 hover:text-slate-100") Privacy Policy     
+            //- Quick Links End
+
+            //- CTA Start
+            //- div(class='w-full lg:w-1/3 px-4  flex-shrink-0')
+            //-     div(class='content mb-4 lg:mb-0')
+            //-         h3(class='text-left font-semibold text-white mb-5 pb-5 border-b border-b-slate-200') Subscribe
+            //-         div(class='subscriber-form-group mb-3')
+            //-             p(class='text-xs leading-6 text-white text-left')    
+            //-                 Want to be notified when we launch a new template or an udpate.
+            //-                 Just sign up and we'll send you a notification by email.
+
+            //-             form(class='mt-5')
+            //-                 div(class='flex gap-x-2')
+            //-                     input( 
+            //-                         type="email" 
+            //-                         name='email' 
+            //-                         placeholder='Enter your Email'
+            //-                         class='h-12 px-5 bg- bg-gray-800 transition-all duration-300 focus:outline-0 border border-transparent focus:border-primary text-white w-9/12 rounded')
+
+            //-                     button(class='transition-all duration-100 hover:bg-primary-light bg-primary rounded cursor-pointer text-white h-12 w-1/4') Submit
+
+            //- CTA End
+
+
+    div(class='footer-bottom py-5 mt-16 bg-dark-light')
+        div(class="max-w-[1300px] w-11/12 mx-auto")
+            div(class="row flex flex-col lg:flex-row items-center justify-between")
+                div(class='copy-right font-medium text-[#999] text-left text-xs w-full lg:w-auto')
+                    span(class='text-primary') &copy; Gereal Technology 2023. All Right Reserved.
+                div(class="w-full lg:w-auto text-right")
+
+                    div(class='inline-block text-center bg-primary w-9 h-9 leading-9 rounded text-white')
+                        i(class='fas fa-caret-up') 
+                div(class='w-full lg:w-auto')
+                    ul(class='list-none flex gap-x-2')
+                        li(class='')
+                            a(href='' class='text-white text-xs') Terms & Conditions
+
+                        li(class='')
+                            a(href='' class='text-white text-xs') Privacy Policy

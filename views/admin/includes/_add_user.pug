@@ -1,0 +1,25 @@
+form.add-user-form
+  .mb-4
+    label(for='name' class='block mb-1 font-medium') Name
+    input(required type='text' name='name' class="inline-block w-full px-4 py-2 bg-[#f0f0f0] border border-transparent rounded transition-all duration-100 focus:outline-0 focus:border-primary")
+  .mb-4
+    label(for='email' class='block mb-1 font-medium') Email
+    input(required type='email' name='email' class="inline-block w-full px-4 py-2 bg-[#f0f0f0] border border-transparent rounded transition-all duration-100 focus:outline-0 focus:border-primary")
+  .mb-4
+    label(for='role' class='block mb-1 font-medium') Role
+    select(required name='role' class="inline-block w-full px-4 py-2 bg-[#f0f0f0] border border-transparent rounded transition-all duration-100 focus:outline-0 focus:border-primary")
+      option(value='' select) -- Select Option --
+      option(value='admin') Admin
+      option(value='author') Author
+  .mb-4
+    label(for='photo' class='block mb-1 font-medium') Photo
+    input(type='file' name='photo' class="inline-block w-full px-4 py-2 bg-[#f0f0f0] border border-transparent rounded transition-all duration-100 focus:outline-0 focus:border-primary")
+  .mb-4
+    label(for='password' class='block mb-1 font-medium') Password
+    input(required type='password' name='password' class="inline-block w-full px-4 py-2 bg-[#f0f0f0] border border-transparent rounded transition-all duration-100 focus:outline-0 focus:border-primary")
+  
+  .mb-4
+    label(for='passwordConfirm' class='block mb-1 font-medium') Password Confirm
+    input(required type='password' name='passwordConfirm' class="inline-block w-full px-4 py-2 bg-[#f0f0f0] border border-transparent rounded transition-all duration-100 focus:outline-0 focus:border-primary")
+  .mb-4
+    button(id='save-user-btn' class="transition-all inline-flex items-center gap-x-2 duration-100 hover:bg-primary-light bg-primary rounded cursor-pointer text-white py-2 px-4") Add User

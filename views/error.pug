@@ -1,0 +1,9 @@
+extends base
+block content
+    section.py-24.bg-white
+        div(class="container max-w-[1140px] w-11/12 mx-auto z-[2] relative")
+            .error.text-center
+                .error__title
+                h2(class="bg-gradient-to-r from-[#ff7730] to-[#eb4d4b] text-5xl bg-clip-text text-transparent tracking-wide leading-relaxed") Uh oh! Something went wrong!   
+                h2.error__emoji 😢 🤯
+                .error__msg.text-2xl.font-bold(class='text-[#777]')= msg

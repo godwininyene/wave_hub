@@ -1,0 +1,25 @@
+form.edit-post-form(data-id=`${post._id}`)
+  .mb-4
+    label(for='title' class='block mb-1 font-medium') Title
+    input(type='text' value=`${post.title}` name='title' class="inline-block w-full px-4 py-2 bg-[#f0f0f0] border border-transparent rounded transition-all duration-100 focus:outline-0 focus:border-primary")
+  .mb-4
+    label(for='category' class='block mb-1 font-medium') Category
+    select#post_category(name='category' class=" capitalize inline-block w-full px-4 py-2 bg-[#f0f0f0] border border-transparent rounded transition-all duration-100 focus:outline-0 focus:border-primary")
+  .mb-4
+    label(for='status' class='block mb-1 font-medium') Status
+    select(name='status' class=" capitalize inline-block w-full px-4 py-2 bg-[#f0f0f0] border border-transparent rounded transition-all duration-100 focus:outline-0 focus:border-primary")
+      option(value='' select) -- Select Option --
+      option(value='published') Publish
+      option(value='draft') Draft
+  .mb-4
+    label(for='coverImage' class='block mb-1 font-medium') Post Image
+    input(type='file' name='coverImage' class="inline-block w-full mb-2 px-4 py-2 bg-[#f0f0f0] border border-transparent rounded transition-all duration-100 focus:outline-0 focus:border-primary")
+    img(width="100" src=`/images/posts/${post.coverImage}`)
+  .mb-4
+    label(for='post-tags' class='block mb-1 font-medium') Post Tags
+    input(type='text' value=`${post.tags}` name='tags' class="inline-block w-full px-4 py-2 bg-[#f0f0f0] border border-transparent rounded transition-all duration-100 focus:outline-0 focus:border-primary")
+  .mb-4
+    label(for='content' class='block mb-1 font-medium') Post Contents
+    textarea#body(name='content' cols='30' rows='10' class="inline-block w-full px-4 py-2 bg-[#f0f0f0] border border-transparent rounded transition-all duration-100 focus:outline-0 focus:border-primary")=post.content
+  .mb-4
+    button(class="edit-post-btn inline-flex items-center gap-x-2 transition-all duration-100 hover:bg-primary-light bg-primary rounded cursor-pointer text-white py-2 px-4") Update Post

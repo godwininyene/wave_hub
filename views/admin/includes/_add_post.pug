@@ -1,0 +1,25 @@
+form.post-form
+  .mb-4
+    label(for='title' class='block mb-1 font-medium') Title
+    input(required type='text' name='title' class="inline-block w-full px-4 py-2 bg-[#f0f0f0] border border-transparent rounded transition-all duration-100 focus:outline-0 focus:border-primary")
+  .mb-4
+    label(for='category' class='block mb-1 font-medium') Category
+    select#post_category(required name='category' class="inline-block w-full capitalize px-4 py-2 bg-[#f0f0f0] border border-transparent rounded transition-all duration-100 focus:outline-0 focus:border-primary")
+      option(select value='') -- Select --
+  .mb-4
+    label(for='status' class='block mb-1 font-medium') Status
+    select(required name='status' class=" capitalize inline-block w-full px-4 py-2 bg-[#f0f0f0] border border-transparent rounded transition-all duration-100 focus:outline-0 focus:border-primary")
+      option(value='' select) -- Select Option --
+      option(value='published') Publish
+      option(value='draft') Draft
+  .mb-4
+    label(for='coverImage' class='block mb-1 font-medium') Post Image
+    input(required type='file' name='coverImage' class="inline-block w-full px-4 py-2 bg-[#f0f0f0] border border-transparent rounded transition-all duration-100 focus:outline-0 focus:border-primary")
+  .mb-4
+    label(for='tags' class='block mb-1 font-medium') Post Tags
+    input(required type='text' name='tags' class="inline-block w-full px-4 py-2 bg-[#f0f0f0] border border-transparent rounded transition-all duration-100 focus:outline-0 focus:border-primary")
+  .mb-4
+    label(for='content' class='block mb-1 font-medium') Post Contents
+    textarea#body(name='content' cols='30' rows='10' class="inline-block w-full px-4 py-2 bg-[#f0f0f0] border border-transparent rounded transition-all duration-100 focus:outline-0 focus:border-primary")
+  .mb-4
+    button(class="post-btn transition-all inline-flex items-center gap-x-2 duration-100 hover:bg-primary-light bg-primary rounded cursor-pointer text-white py-2 px-4") Add Post

@@ -1,0 +1,31 @@
+doctype html
+html(lang="en")
+    head
+    
+        meta(charset="UTF-8")
+        meta(name="viewport", content="width=device-width, initial-scale=1.0")
+        link(rel="stylesheet" href="/css/fontawesome-free-6.4.2/css/all.min.css")
+        link(rel="shortcut icon", href="/images/logo.png")
+        link(rel="stylesheet" href="/css/vendors/aos.css")
+        link(rel="stylesheet", href="/css/style.css")
+        block metaDescription 
+            meta(name='description', content='Your one stop place for all relevance articles')
+            meta(name='keywords', content='rave hub')
+
+        title Wave Hub | #{title}
+    body(data-aos-easing='ease' data-aos-duration='400' data-aos-delay='0') 
+        //Header Start
+        include includes/_header
+       
+ 
+        //Main 
+        main(id="wrapper" class='bg-dark relative z-10 pt-[92px] lg:pt-[106px] min-h-[82vh] overflow-hidden')
+            block content
+
+                    
+        //Footer
+        include includes/_footer
+        script(src="/js/vendors/aos.js")
+        script(src='/js/bundle.js')
+
+

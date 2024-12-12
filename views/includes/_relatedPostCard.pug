@@ -1,0 +1,23 @@
+mixin relatedPostCard(post)
+    div(class='w-full relative mb-5')
+        div(class="h-full list-post border-b border-b-slate-200 w-full relative before:absolute before:bottom-0 before:left-0 before:h-[1px] before:w-8 before:bg-primary")
+            a(href="" class=`absolute top-0 left-0 z-20 inline-block py-2 px-4 mb-2 rounded transition-all duration-100 hover:bg-primary-light font-semibold uppercase text-[10px]  bg-primary text-white`)=post.category.name
+            div(class="list-post-media group h-[240px] w-full relative overflow-hidden rounded")
+                a(href=`/post/${post.slug}` class="relative")
+                    img(src=`/images/posts/${post.coverImage}` class="w-full h-full object-cover")
+                    span(class='inline-block w-full h-full absolute top-0 left-0 bottom-0 right-0 z-[2] transition-all duration-200 ease-linear opacity-0 bg-[rgba(0,0,0,0.5)] group-hover:opacity-100')
+                        |&nbsp;
+
+                    span(class='inline-block text-center text-white h-10 w-10 leading-10 rounded-full absolute left-2/4 top-2/4 -translate-x-2/4 -translate-y-2/4 z-[3] bg-primary transition-all duration-200 ease-linear opacity-0 group-hover:opacity-100' style='box-shadow:0px 0px 0px 4px rgba(255,255,255,0.4)')
+                        i( class='fas fa-caret-right')
+
+            div(class="list-post-content pt-3")
+                h3(class="font-extrabold text-lg text-left transition-all duration-300 hover:text-primary")
+                    a(href=`/post/${post.slug}` class="")=post.title
+
+                span(class="post-date w-full text-left text-[10px] font-black uppercase text-[#666]  mt-1 mb-3 flex items-center")
+                    i(class="fas fa-clock  mr-1  text-primary ")
+                    - const date = post.createdAt.toLocaleString('en-us', {day:'numeric', month: 'long', year: 'numeric'})
+                    |#{date}
+                p(class="text-left text-xs leading-6 pb-3 font-semibold text-slate-500")
+                    |lorem eloreom eoeooeo eoeifheifheif eifehfiheifheife eiheifheifhef 

@@ -1,0 +1,116 @@
+extends base
+block content
+  //Banner Start
+  section(class='banner bg-white text-white')
+    div(class='pt-20 pb-24 page-banner bg-dark rounded-b-2xl relative z-10')
+      div(class='container')
+        div(class='flex items-end flex-col lg:flex-row')
+          div(class='w-full sm:w-2/3 px-3 text-center sm:text-left')
+            h1(class='text-[2.5rem] leading-[3rem] sm:leading-9 md:text-5xl font-secondary font-medium -mt-[6px] text-center sm:text-left mb-6 sm:mb-8')
+              |All Posts in the
+              |
+              span.capitalize=category_name
+              |
+              |Category
+            nav(aria-label='breadcrumb')
+              ul(class='flex items-center justify-center sm:justify-start ')
+                li(class='')
+                  i(class='fa fa-home')
+                li(class='pl-2')
+                  a(class='link' href='/') Home
+                li(class='')
+                  span(class='px-4') .
+                li(class='pl-2')
+                  a(class='link' href='/about') About
+          div(class='w-full sm:w-1/3 block mt-6 sm:mt-0 text-center sm:text-right')
+            span(class='font-secondary text-2xl leading-none text-white/75') Stay Updated
+  //Banner End
+
+
+  //About Start
+  section(class='hidden w-full relative z-10 overflow-hidden py-16 bg-gray-100')
+    div(class="container max-w-[1140px] w-11/12 mx-auto z-[2] relative")
+      div(class='row -mx-4 clear-both table')
+        div(class='w-full lg:w-5/12 relative px-3 float-left')
+
+          div(class="section-title mb-10 pb-5 border-b border-b-slate-300 relative before:absolute before:-bottom-[1px] before:left-0 before:w-20 before:h-[1px] before:bg-primary")
+            h2(class="font-bold text-2xl text-dark") Gereal Studio Story
+            h4(class="text-sm font-semibold mt-1 text-slate-500") Meet us
+
+          div(class="about-wrap") 
+            p(class="text-sm font-medium pb-3 text-slate-600")
+              |Aliquam luctus tempor orci sit amet finibus. Duis porttitor, 
+              |ex ac molestie consectetur, metus tellus venenatis velit, et interdum enim lorem a purus.
+              |Fusce scelerisque, massa vitae rhoncus elementum, enim acinia pharetra?
+
+
+            p(class="text-sm font-medium pb-3 text-slate-600")
+              |Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
+              |Proin ornare sem sed quam tempus aliquet vitae eget dolor. 
+              |Proin eu ultrices libero. Curabitur vulputate vestibulum elementum. 
+              |Suspendisse id neque a nibh mollis blandit.
+              |Quisque varius eros ac purus dignissim. Proin eu ultrices libero.
+
+            div(class='md:flex gap-3 mb-10 md:mb-28')
+              a(href='/about' class='py-3 px-5 mx-2 md:mx-0 rounded-3xl bg-primary text-white font-bold') Learn More
+
+        div(class='w-full lg:w-[55%] relative  px-3 float-none lg:float-left')
+          div(class="about-img w-full float-left relative pl-10")
+            img(src='/images/bg-3.jpg' class="w-full h-auto object-cover rounded")
+  //About End
+
+  //Page Main Content Start
+  section(class='py-24 bg-white ')
+    div(class="container max-w-[1140px] w-11/12 mx-auto z-[2] relative")
+      div(class='row -mx-4 clear-both table')
+
+        //Left Hand Contents
+        div(class='w-full lg:w-2/3 relative px-3 float-left')
+
+          //Add Banner Appear here.
+          div(class="add-space mb-6")
+            img(src='/images/banner.jpg' class="ad-banner w-full h-auto")
+          div(class="section-title flex flex-wrap flex-col lg:flex-row justify-between items-start lg:items-center mb-10 pb-5 lg:border-b lg:border-b-slate-200 relative before:absolute before:left-0 before:bottom-[-1px] before:w-[70px] before:h-[1px] before:bg-primary")
+            div(class="caption")
+              h2(class="text-left text-2xl font-bold") General World News
+              h4(class="text-left text-slate-500 text-xs font-semibold my-2") Stay up to date with happenings round the world
+
+              //Categories Start
+              include includes/_main_categories_card
+              //Categories End
+
+          //Articles Container
+          div(class='mb-12 grid grid-cols-1 lg:grid-cols-2 lg:gap-x-5')
+           
+            if posts.length > 0
+              //Post 1
+              each post in posts
+                div(class='w-full relative mb-5')
+                  div(class="h-full list-post border-b border-b-slate-200 w-full relative before:absolute before:bottom-0 before:left-0 before:h-[1px] before:w-8 before:bg-primary")
+                    a( class=`absolute top-0 left-0 z-20 cursor-pointer inline-block py-2 px-4 mb-2 rounded transition-all duration-100 hover:bg-primary-light font-semibold uppercase text-[10px]  bg-primary text-white`)=post.category.name
+                    div(class="list-post-media group h-[240px] w-full relative overflow-hidden rounded")
+                      a(href=`/post/${post.slug}` class="relative")
+                        img(src=`/images/posts/${post.coverImage}` class="w-full h-full object-cover")
+                        span(class='inline-block w-full h-full absolute top-0 left-0 bottom-0 right-0 z-[2] transition-all duration-200 ease-linear opacity-0 bg-[rgba(0,0,0,0.5)] group-hover:opacity-100')
+                          |&nbsp;
+
+                        span(class='inline-block text-center text-white h-10 w-10 leading-10 rounded-full absolute left-2/4 top-2/4 -translate-x-2/4 -translate-y-2/4 z-[3] bg-primary transition-all duration-200 ease-linear opacity-0 group-hover:opacity-100' style='box-shadow:0px 0px 0px 4px rgba(255,255,255,0.4)')
+                          i( class='fas fa-caret-right')
+                    
+                    div(class="list-post-content pt-3")
+                      h3(class="font-extrabold text-lg text-left transition-all duration-300 hover:text-primary")
+                        a(href=`/post/${post.slug}` class="")=post.title
+                    
+                      span(class="post-date w-full text-left text-[10px] font-black uppercase text-[#666]  mt-1 mb-3 flex items-center")
+                        i(class="fas fa-clock  mr-1  text-primary ")
+                        - const date = post.createdAt.toLocaleString('en-us', {day:'numeric', month: 'long', year: 'numeric'})
+                        |#{date}
+                      p(class="text-left text-xs leading-6 pb-3 font-semibold text-slate-500")
+                        |#{post.content.split(" ").slice(0, 23).join(" ")}...
+              //Post 1 End
+            else 
+              h1(class='bg-red-200 p-5 w-full text-center col-span-2') No post was found in this category at the moment. Please check back later.
+        div(class='w-full lg:w-1/3 sticky top-36  px-3 float-none lg:float-left')
+          //SideBar
+          include includes/_sidebar
+        

@@ -1,0 +1,59 @@
+doctype html
+html(lang="en")
+    head
+        meta(charset="UTF-8")
+        meta(name="viewport", content="width=device-width, initial-scale=1.0")
+        link(rel="stylesheet" href="/css/fontawesome-free-6.4.2/css/all.min.css")
+        link(rel="shortcut icon", href="/images/logo.png")
+        //- script(src="https://cdn.ckeditor.com/ckeditor5/35.1.0/classic/ckeditor.js")
+        link(rel="stylesheet", href="/css/style.css")
+        script(type="text/javascript" src="https://www.gstatic.com/charts/loader.js")
+        meta(name='description', content='Your one stop place for all relevance articles')
+        title Wave Hub | #{title}
+    body(data-aos-easing='ease' data-aos-duration='400' data-aos-delay='0') 
+        //Header Start
+        include includes/_header
+
+        //Sidebar Start
+        include includes/_sidebar
+
+        //Main 
+        div(id="page-wrapper" class="md:ml-56 min-h-full relative py-3 md:py-4 px-4 top-[100px]")
+            div(class="max-w-full mx-auto px-4 ")
+                //Page Heading
+                div(class="flex flex-wrap -mx-4 border-b  mb-5 pb-3 mt-9 lg:mt-0")
+                    div(class="w-full lg:w-12/12")
+                        h1(class="text-2xl lg:text-3xl font-medium") 
+                            |Welcome Admin 
+                            small(class="text-xl text-gray-400 block lg:inline-block")=user.name
+
+                block content   
+
+        //Footer
+        //- include includes/_footer
+
+        //MODAL
+        #modal.h-screen.invisible.opacity-0.w-full.fixed.top-0.left-0.bg-black.bg-opacity-80.transition-all.duration-300(class='z-[9999]')
+            #modal-dialog.text-center.opacity-0.invisible.mx-auto.mt-36.bg-white.shadow-2xl.relative.transition-all.duration-500.rounded-lg.text-base(class='w-[30%]')
+                #modal-content.text-center
+                    #modal-header.relative.p-4.border-b.border-b-gray-300
+                        p.-mt-7.mb-4
+                            i.fas.fa-question-circle.inline-block.h-10.w-10.mx-auto.text-primary.text-5xl
+                        h5.modal-title.font-medium.text-xl
+                        a.absolute.-top-4.-right-4.text-4xl.no-underline.text-black.text-center.leading-10.bg-white.w-11.h-11.rounded-full.shadow-md.cursor-pointer(onclick='hideModal()') &times;
+                    #modal-body.p-4.border-b.border-b-gray-300
+                        p.modal-text
+                           
+                            br
+                            br
+                            span.font-semibold  Do you want to proceed?
+                    #modal-footer.flex.gap-2.items-center.justify-center.p-4
+                        button(id='modal-yes-btn').bg-primary.text-white.py-1.px-3.rounded-md.inline-flex.items-center.gap-1
+                            i.fas.fa-thumbs-up.w-4.h-4.inline
+                            |  Yes
+                        button.bg-red-500.text-white.py-1.px-3.rounded-md.inline-flex.items-center.gap-1(onclick='hideModal()')
+                            i.far.fa-times-circle.w-4.h-4.inline(id="yes-icon")
+                            |  Cancel
+
+    script(src='/js/vendors/ckeditor.js')
+    script(src='/js/admin/adminbundle.js')

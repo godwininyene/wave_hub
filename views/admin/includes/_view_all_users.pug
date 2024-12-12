@@ -1,0 +1,23 @@
+.w-full.overflow-x-scroll
+  table.w-full.border.border-collapse.border-gray-200
+    thead
+      tr.border
+        th.py-1.px-3 Name
+        th.py-1.px-3 Email
+        th.py-1.px-3 Role
+        th.py-1.px-3 Photo
+        th.py-1.px-3 Action
+    tbody
+      each user in users
+        tr.text-center(class='hover:bg-gray-100')
+        
+          td.p-2.border=user.name
+          td.p-2.border=user.email
+          td.p-2.border=user.role
+          td.p-2.border.w-24
+              img.bg-slate-300.h-14.w-14.rounded-full.overflow-hidden(src=`/images/users/${user.photo}`)
+          td.p-2.border
+            //- a.py-1.px-2.text-blue-500(href='/manage_users?source=edit_user')
+            //-   i.fas.fa-edit
+            button.py-1.px-2.text-red-500
+              i.fas.fa-trash-alt

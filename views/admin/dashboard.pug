@@ -1,0 +1,110 @@
+extends base
+block content
+    // Info Panels
+    div(class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4")
+
+        div(class="w-full")
+            div(class="rounded-lg border border-blue-500 overflow-hidden")
+                div(class="flex items-center justify-between bg-blue-500 p-4 text-white")
+                    i(class="fa fa-file-text fa-5x")
+                    div(class="text-right")
+                        
+                        div(class='text-[40px] font-normal')=stats.posts
+                        div Post
+                a(href="/manage_posts")
+                    div(class="bg-[#f5f5f5] text-blue-500 hover:text-blue-800 rounded-b border-t border-t-blue-500 py-2 px-4 flex justify-between")
+                        span View Details
+                        span
+                            i(class="fa fa-arrow-circle-right")
+
+        div(class="w-full")
+            div(class="rounded-lg border border-green-500 overflow-hidden")
+                div(class="flex items-center justify-between bg-green-500 p-4 text-white")
+                    i(class="fa fa-comments fa-5x")
+                    div(class="text-right")
+                        
+                        div(class='text-[40px] font-normal')=stats.comments
+                        div Comments
+                a(href="/manage_comments")
+                    div(class="bg-[#f5f5f5] text-green-500 hover:text-green-800 rounded-b border-t border-t-green-500 py-2 px-4 flex justify-between")
+                        span View Details
+                        span
+                            i(class="fa fa-arrow-circle-right")
+
+        div(class="w-full")
+            div(class="rounded-lg border border-yellow-500 overflow-hidden")
+                div(class="flex items-center justify-between bg-yellow-500 p-4 text-white")
+                    i(class="fa fa-user fa-5x")
+                    div(class="text-right")
+                        
+                        div(class='text-[40px] font-normal')=stats.users
+                        div Users
+                a(href="/manage_users")
+                    div(class="bg-[#f5f5f5] text-yellow-500 hover:text-yellow-800 rounded-b border-t border-t-yellow-500 py-2 px-4 flex justify-between")
+                        span View Details
+                        span
+                            i(class="fa fa-arrow-circle-right")
+
+
+        div(class="w-full")
+            div(class="rounded-lg border border-red-500 overflow-hidden")
+                div(class="flex items-center justify-between bg-red-500 p-4 text-white")
+                    i(class="fa fa-list fa-5x")
+                    div(class="text-right")
+                        
+                        div(class='text-[40px] font-normal')=stats.categories
+                        div Categories
+                a(href="/manage_categories")
+                    div(class="bg-[#f5f5f5] text-red-500 hover:text-red-800 rounded-b border-t border-t-red-500 py-2 px-4 flex justify-between")
+                        span View Details
+                        span
+                            i(class="fa fa-arrow-circle-right")
+    // Chart Section
+    .-mx-4.mt-5
+        script(type="text/javascript").
+            const stats = !{JSON.stringify(stats)};
+            google.charts.load('current', { packages: ['bar'] });
+            google.charts.setOnLoadCallback(drawChart);
+
+            function drawChart() {
+                const elements_text = [
+                    'All Posts',
+                    'Active Posts',
+                    'Draft Posts',
+                    'Comments',
+                    'Pending Comments',
+                    'Users',
+                    'Subscribers',
+                    'Categories'
+                ];
+
+                const elements_count = [
+                    stats.posts,
+                    stats.published_posts,
+                    stats.draft_posts,
+                    stats.comments,
+                    stats.pending_comments,
+                    stats.users,
+                    0,
+                    stats.categories
+                ];
+
+                const dataArray = [['Data', 'Count']];
+                for (let i = 0; i < elements_text.length; i++) {
+                    dataArray.push([elements_text[i], elements_count[i]]);
+                }
+
+                const data = google.visualization.arrayToDataTable(dataArray);
+
+                const options = {
+                    chart: {
+                        title: '',
+                        subtitle: ''
+                    }
+                };
+
+                const chart = new google.charts.Bar(document.getElementById('columnchart_material'));
+                chart.draw(data, google.charts.Bar.convertOptions(options));
+            }
+        #columnchart_material(style="width: auto; height: 500px;")
+

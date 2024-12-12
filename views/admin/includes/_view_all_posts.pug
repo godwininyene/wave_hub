@@ -1,0 +1,47 @@
+form.w-full.overflow-x-scroll
+  table.w-full.border.border-collapse.border-gray-200
+    .flex.mb-5(class='flex-col lg:flex-row')
+      #bulkOptionContainer.w-full.flex-shrink-0(class='md:w-1/4')
+        select.w-full.border.border-gray-200.p-2(name='bulk_options')
+          option(value='' select) -- Select Option --
+          option(value='published') Publish
+          option(value='draft') Draft
+          option(value='delete') Delete
+      .w-full.flex.gap-x-3.flex-shrink-0(class='md:w-1/4 lg:ml-3 mt-2 lg:mt-0')
+        input.bg-green-500.text-white.p-2.cursor-pointer(type='submit' name='' class='hover:bg-green-700' value='Apply')
+        a.bg-blue-500.text-white.p-2(href='/manage_posts?source=add_post' class='hover:bg-blue-700') Add New
+    thead
+      tr.border
+        th.py-1.px-3
+          input#selectAllBoxes(type='checkbox' name='')
+        th.py-1.px-3 Author
+        th.py-1.px-3 Title
+        th.py-1.px-3 Category
+        th.py-1.px-3 Status
+        th.py-1.px-3 Tags
+        th.py-1.px-3 Date
+        th.py-1.px-3 Comment
+        th.py-1.px-3 Views
+        th.py-1.px-3 Action
+    tbody
+      each post in posts
+        tr.text-center(class='hover:bg-gray-100')
+          td.p-2.border
+            input.checkBoxes(type='checkbox' name='checkBoxArray[]' value=`${post._id}`)
+          td.p-2.border=post.author.name
+          td.p-2.border
+             a(href=`/post/${post.slug}`  class='text-blue-600')=post.title 
+          td.p-2.border.capitalize=post.category.name
+          td.p-2.border.capitalize=post.status
+          td.p-2.border=post.tags
+          - const date = new Date(post.createdAt).toLocaleDateString('en-GB', {day: '2-digit',month: 'short',year: 'numeric'})
+          td.p-2.border=date
+          td.p-2.border #{post.commentCount} / #{post.comments.length} 
+          td.p-2.border=post.viewers.length
+          td.p-2.border
+            a.py-1.px-2.text-primary(href=`/manage_posts?source=edit_post&p_id=${post._id}`)
+              i.fas.fa-edit
+            button.py-1.px-2.text-red-500.delete-post-btn(data-id=`${post._id}` type='button')
+              i.fas.fa-trash-alt
+          
+       

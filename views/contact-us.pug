@@ -1,0 +1,54 @@
+extends base
+block content 
+  //Banner Start
+  section(class='banner bg-white text-white')
+    div(class='pt-20 pb-24 page-banner bg-dark rounded-b-2xl relative z-10')
+      div(class='container')
+        div(class='flex items-end flex-col lg:flex-row')
+          div(class='w-full sm:w-2/3 px-3 text-center sm:text-left')
+            h1(class='text-[2.5rem] leading-[3rem] sm:leading-9 md:text-5xl font-secondary font-medium -mt-[6px] text-center sm:text-left mb-6 sm:mb-8')
+              |Contact Wave Hub
+            nav(aria-label='breadcrumb')
+              ul(class='flex items-center justify-center sm:justify-start [&>*:last-child]:pointer-events-none')
+                li(class='')
+                  i(class='fa fa-home')
+                li(class='pl-2')
+                  a(class='link' href='/') Home
+                li(class='')
+                  span(class='px-4') .
+                li(class='pl-2')
+                  a(class='link' href='/contact-us') contact Us
+          div(class='w-full sm:w-1/3 block mt-6 sm:mt-0 text-center sm:text-right')
+            span(class='font-secondary text-2xl leading-none text-white/75') Contact Us
+
+  section(class='w-full relative z-10 overflow-hidden py-16 rounded-b-2xl bg-white')
+    div(class="container max-w-[1140px] w-11/12 mx-auto z-[2] relative")
+      div(class='row -mx-4 clear-both table')
+        div(class='w-full lg:w-5/12 relative px-3 float-left')
+
+          div(class="section-title mb-10 pb-5 border-b border-b-slate-300 relative before:absolute before:-bottom-[1px] before:left-0 before:w-20 before:h-[1px] before:bg-primary")
+            h2(class="font-bold text-2xl text-dark") Wave Hub
+            h4(class="text-sm font-semibold mt-1 text-slate-500") Contact us
+
+          div(class="contact-wrap") 
+            h2.font-semibold.text-4xl.mb-3 Make Inquiries
+            p(class="font-medium mb-6 text-slate-700")
+                |If you have any comments or feedback, please contact us through
+                |any of the following medium and we will reply within 2 working days.
+
+            p(class="font-medium mb-6 text-slate-700")
+                strong Call/Text/Whatsapp:
+                |
+                |
+                |+2348144098649
+            
+            p(class="font-medium mb-6 text-slate-800")
+                strong Email:
+                |
+                |
+                a(href='mailto:admin@wavhub.com.ng') admin@wavhub.com.ng
+
+
+        div(class='w-full lg:w-[55%] relative  px-3 float-none lg:float-left')
+          div(class="about-img w-full float-left relative lg:pl-10")
+            img(src='/images/logo.png' class="w-full h-auto object-cover rounded")

@@ -1,0 +1,28 @@
+header(class="bg-gray-800 fixed top-0 w-full z-50 shadow-lg border-b border-black")
+  // Brand and toggle grouped for mobile display
+  div(class="flex justify-between lg:items-center px-4 py-2 flex-wrap flex-row-reverse lg:flex-row")
+    button(id='nav-btn' type="button" class="block md:hidden h-12 w-12 rounded-full border border-white/10 p-1 text-gray-200 hover:text-white focus:outline-none")
+        i(class='nav-icon fa fa-bars ')
+   
+        
+    a(class="text-white font-bold text-lg flex items-center" href="index.php")
+        img(src='/images/logo.png' class='w-14')
+        h1(class='text-2xl ml-2') Wave Hub
+    
+    ul(class="flex items-center justify-between lg:justify-start space-x-6 px-4 w-full lg:w-auto")
+        li 
+            a(class="text-gray-300 hover:text-white" href="/") Home Site
+        li(class="relative group")
+            a(class="text-gray-300 hover:text-white flex items-center space-x-2 cursor-pointer")
+                img.bg-slate-300.h-12.w-12.rounded-full.overflow-hidden.mr-1.border.border-primary(src=`/images/users/${user.photo}`)
+                |#{user.name.split(" ")[0]}
+                i(class="fa fa-caret-down ml-1")
+            ul(class="absolute w-[150px]  right-0 hidden group-hover:block bg-gray-700 text-gray-200 shadow-md py-2 rounded")
+                li
+                    a(class="block px-4 py-2 hover:bg-gray-600" href="/me")
+                        i(class="fa fa-fw fa-user mr-2")
+                        | Profile
+                li
+                    a(class="block px-4 py-2 hover:bg-gray-600 cursor-pointer" id='loggedOut-btn')
+                        i(class="fa fa-fw fa-power-off mr-2")
+                        | Log Out

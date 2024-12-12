@@ -1,0 +1,11 @@
+extends base
+block content 
+    - source = source || '';
+    - if (source === 'add_user')
+        include includes/_add_user
+    - else if (source === 'edit_user')
+        include includes/_edit_user
+    - else
+        include includes/_view_all_users
+
+    

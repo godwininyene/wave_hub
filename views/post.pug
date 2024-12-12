@@ -1,0 +1,112 @@
+extends base
+include includes/_relatedPostCard
+include includes/_commentCard
+block  metaDescription
+    meta(name='keywords', content=`${post.tags}`)
+    meta(name='description', content=`${post.content.split(" ").slice(0, 200).join(" ")}`)
+block content 
+    //Page Main Content Start
+    section.py-24.bg-white
+        div(class="container max-w-[1140px] w-11/12 mx-auto z-[2] relative")
+            .row.-mx-4.flex(class='flex-col lg:flex-row')
+                //Single Post
+                div(class='class="w-full lg:w-2/3 relative px-3 pb-5')
+
+                    // Add Banner Appear here
+                    div(class="add-space my-5")
+                        img(src='/images/banner.jpg' class="ad-banner w-full h-auto max-w-full")
+
+                    // Single Post Header Start
+                    div(class="sing-post-header pb-3 relative w-full")
+                        a(href=`/category/${post.category.name}/${post.category.id}` class="inline-block py-2 px-3 mb-2 rounded font-semibold uppercase text-[10px] transition-all duration-100 hover:bg-primary-light bg-primary text-white")= post.category.name
+                        h1(class="font-bold text-xl lg:text-3xl text-left mb-5")= post.title
+
+                        //Meta Info
+                        .block(class='lg:flex justify-between')
+                            .flex
+                                // Post Author
+                                div(class="post-author")
+                                    a(href=`/author/${post.author.name.split(' ').join('-')}/${post.author._id}` class="text-black relative")
+                                        img(src= `/images/users/${post.author.photo}` class="author-avatar h-9 w-9 rounded-full mr-2 float-left")
+                                        span(class="author-name text-[10px] font-bold uppercase relative top-[9px]")=`By ${post.author.name}`
+
+                                span(class="post-date text-left text-[10px] font-black uppercase text-[#666] inline-block mt-4 ml-5")
+                                    i(class="fa fa-clock mr-1 text-primary inline")
+                                    - const date = post.createdAt.toLocaleString('en-us', {day:'numeric', month: 'long', year: 'numeric'})
+                                    |#{date}
+
+                            //Commment, and view count
+                            .flex.justify-between.items-center
+                                ul(class="bg-[#f9f9f9] border border-slate-100 py-2 pr-3 pl-1 w-full lg:w-auto mt-3 lg:mt-0 flex justify-center")
+                                    li(class="ml-3 text-xs font-semibold uppercase flex items-center")
+                                        i(class="fa fa-comments inline mr-1 font-extrabold text-primary")
+                                        span= post.comments.length
+                                    li(class="ml-3 text-xs font-semibold uppercase flex items-center")
+                                        i(class="fa fa-eye inline mr-1 font-extrabold text-primary")
+                                        span= post.viewers.length
+
+                    // Single Post Media Start
+                    div(class="single-post-media w-full relative mb-5 py-3")
+                        img(src=`/images/posts/${post.coverImage}` class="w-full object-cover mx-auto lg:mx-0")
+
+                    // Single Post Content Start
+                    div(class="single-post-content w-full relative mb-5")
+                        
+
+                        p(class="max-w-full mb-2 font-normal text-black text-left text-sm")!=post.content       
+
+                    // CTA Start
+                    div(class="my-10")
+                        span(class="text-lg inline-block mb-2") Share this article
+                        ul(class="flex gap-x-2 items-center")
+                            each platform in ['facebook', 'twitter', 'instagram', 'pinterest']
+                                li
+                                    a(href=`` class="transition-all duration-100 bg-primary hover:bg-primary-light text-xs inline-block text-center w-8 h-8 leading-8 text-white rounded")
+                                        i(class=`fa-brands fa-${platform}`)
+
+
+                    // Comment Form Start
+                    div(class="w-full mb-10")
+                        form.comment-form(data-id=`${post._id}`)
+                            span(class="italic inline-block mb-3 font-semibold") Leave A comment
+                            div(class="mb-3")
+                                input(id='comment_author' type="text" placeholder="Enter your name" name="name" class="inline-block w-full px-4 py-3 bg-[#f0f0f0] border border-transparent rounded transition-all duration-100 focus:outline-0 focus:border-primary")
+                            div(class="mb-3")
+                                input(id='email' type="text" placeholder="Enter your email" name="email" class="inline-block w-full px-4 py-3 bg-[#f0f0f0] border border-transparent rounded transition-all duration-100 focus:outline-0 focus:border-primary")
+                            div(class="mb-3")
+                                textarea(id='comment_content' type="text" placeholder="Enter your comment" name="comment" class="inline-block w-full h-32 px-4 py-3 bg-[#f0f0f0] border border-transparent rounded transition-all duration-100 focus:outline-0 focus:border-primary")
+                            div(class="mb-3")
+                                button(class="add-comment-btn inline-flex items-center gap-x-2 transition-all duration-100 hover:bg-primary-light bg-primary rounded cursor-pointer text-white h-12 px-10") Submit
+
+                    // Single Post Comment Start
+                    div(class="comments w-full relative  mt-5")
+                        div(class="title text-lg text-left relative w-full font-semibold text-black mb-7 before:absolute before:right-0 before:top-2/4 before:w-[70%] before:h-[1px] before:bg-[#eee] before:z-[1] after:absolute after:right-0 after:top-2/4 after:w-[50px] after:h-[1px] after:bg-primary after:z-[2]")
+                            | Comments 
+                            |
+                            span(class="text-primary")=post.comments.length
+
+                        ul(class="commentlist clear-both table w-full relative")
+                            if post.comments.length > 0
+                                each comment in post.comments
+                                    +commentCard(comment)   
+                            else 
+                                h1(class='bg-red-200 p-5 w-full text-center col-span-2') No comment yet. Be the first to comment.
+                        
+                               
+                    // Related Stories Start
+                    div
+                        div(class="content-tab rounded-t my-5")
+                            span(class="text-white text-center bg-dark py-4 mb-3 w-full uppercase text-lg font-semibold inline-block") Related Stories
+                           
+                            //Articles Container
+                            div(class='my-12 grid grid-cols-1 lg:grid-cols-2 lg:gap-x-5')
+                                if posts.length > 0
+                                    //Post 1
+                                    each post in posts
+                                        +relatedPostCard(post)   
+                                else 
+                                    h1(class='bg-red-200 p-5 w-full text-center col-span-2') No post related posts at the moment. Please check back later
+                    
+                //Sidebar
+                div(class='w-full lg:w-1/3 sticky top-36  px-3')
+                    include includes/_sidebar

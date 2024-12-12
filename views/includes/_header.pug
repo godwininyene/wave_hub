@@ -1,0 +1,42 @@
+header(class='fixed top-0 z-[9000] w-full header [&.invisible]:-translate-y-full')
+    div(class='container')
+        div(class='flex justify-between py-6 items-center relative')
+
+            //Logo
+            div(class='hideOnScroll lg:[&.scrolled]:opacity-0 lg:[&.scrolled]:-translate-x-8 w-1/4 transition-all duration-300')
+                a(class='inline-block align-middle' href='/')
+                    img(src="/images/logo.png", alt="Logo" class='h-12')
+
+            // Nav Bar
+            nav(class="navbar navbar-default navbar-lg navbar-mobile")
+                span(class="indicator hidden lg:block" style="left: 8px; width: 87px; opacity: 1; transform: scaleX(1);")
+                a(href="/" class='active relative z-20 block py-3  px-[22px] leading-[1] text-white/50 transition-all duration-300') Home
+                a(href="/about" class='relative z-20 block py-3  px-[22px] leading-[1] text-white/50 transition-all duration-300') About
+                a(href="/contact-us" class='relative z-20 block py-3  px-[22px] leading-[1] text-white/50 transition-all duration-300') Contact
+                a(href="/privacy-policy" class='relative z-20 block py-3  px-[22px] leading-[1] text-white/50 transition-all duration-300') Privacy Policy
+                if user 
+                    a(href="/dashboard" class='relative z-20 block py-3  px-[22px] leading-[1] text-white/50 transition-all duration-300') Dashboard  
+                else
+                    a(href="/login" class='relative z-20 block py-3  px-[22px] leading-[1] text-white/50 transition-all duration-300') Admin
+            div(class='navOverlay')
+
+            // Toggle Mobile Nav
+            div(class='absolute right-0 top-[25px] block lg:hidden')
+                button(class='navToggler relative z-40 h-12 w-12 rounded-full border border-white/10 p-1' type='button' aria-label='Toggle Mobile Navigation')
+                    i(class='nav-icon fa fa-bars  text-white')
+
+            //Social Links
+            div(class='hideOnScroll lg:[&.scrolled]:opacity-0 lg:[&.scrolled]:translate-x-8 w-1/4 transition-all duration-300 text-right text-sm hidden lg:block')
+                ul(class='inline-flex gap-x-2 ml-5 lg:ml-auto items-center')
+                    li
+                        a(href='' class='transition-all duration-100 bg-primary hover:bg-primary-light text-xs inline-block text-center w-8 h-8 leading-8 text-white rounded')
+                            i(class='fa-brands fa-facebook')
+                    li
+                        a(href='' class='transition-all duration-100 bg-primary hover:bg-primary-light text-xs inline-block text-center w-8 h-8 leading-8 text-white rounded')
+                            i(class='fa-brands fa-twitter')
+                    li
+                        a(href='' class='transition-all duration-100 bg-primary hover:bg-primary-light text-xs inline-block text-center w-8 h-8 leading-8 text-white rounded')
+                            i(class='fa-brands fa-instagram')
+                    li
+                        a(href='' class='transition-all duration-100 bg-primary hover:bg-primary-light text-xs inline-block text-center w-8 h-8 leading-8 text-white rounded')
+                            i(class='fa-brands fa-pinterest')
