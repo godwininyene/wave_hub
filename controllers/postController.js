@@ -1,10 +1,14 @@
 const catchAsync = require('./../utils/catchAsync');
-const Post = require('./../models/postModel')
+// const Post = require('./../models/postModel')
+const Post = require('./../models/Post')
+const User = require('./../models/User')
+const Category = require('../models/Category');
+const Comment = require('./../models/Comment')
 const AppError = require('./../utils/appError')
 const multer = require('multer');
 const sharp = require('sharp')
 const slugify = require('slugify')
-const APIFeatures = require('./../utils/apiFeatures')
+const APIFeatures = require('./../utils/apiFeatures');
 
 
 const multerStorage = multer.memoryStorage()
@@ -48,16 +52,17 @@ exports.aliasPopularPosts = (req, res, next)=>{
 exports.aliasRecentPosts = (req, res, next)=>{
     req.query.limit = '5';
     req.query.sort='-createdAt'
-    req.query.fields='title,coverImage,createdAt,viewers,commentCount,slug'
+    req.query.fields='title,coverImage, createdAt ,viewers ,commentCount,slug'
     next();
 }
 
 exports.createPost = catchAsync(async(req, res, next)=>{
 
-    req.body.author = req.user._id;
+    // req.body.author = req.user._id;
+    req.body.authorId = req.user.id;
  
     if(req.file) req.body.coverImage = req.file.filename;
-
+   
     const post = await Post.create(req.body)
     res.status(200).json({
         status:"success",
@@ -69,15 +74,24 @@ exports.createPost = catchAsync(async(req, res, next)=>{
 
 
 exports.getAllPosts = catchAsync(async(req, res, next) =>{
-   
     //EXECUTE THE QUERY
-    const features = new APIFeatures(Post.find(), req.query)
+    // const features = new APIFeatures(Post.find(), req.query)
+    // .filter()
+    // .sort()
+    // .limitFields()
+    // .paginate()
+    // const posts = await features.query;
+
+    // Initialize APIFeatures with query params
+    const features = new APIFeatures(req.query)
     .filter()
     .sort()
     .limitFields()
-    .paginate()
-    const posts = await features.query;
-  
+    .paginate();
+
+    // Execute the query with the options
+    const posts = await Post.findAll(features.getOptions());
+   
     //Send Response
     res.status(200).json({
         status:"success",
@@ -89,24 +103,58 @@ exports.getAllPosts = catchAsync(async(req, res, next) =>{
 });
 
 exports.getPost = catchAsync(async(req, res, next)=>{
-    const post = await Post.
-        findById(req.params.id)
-        .populate({path:'comments', select:'comment author createdAt'})
-        .populate({path:"author", select:'name authorSlug'})
-        .populate({path:'category', select:'name'});
+    // const post = await Post.
+    //     findById(req.params.id)
+    //     .populate({path:'comments', select:'comment author createdAt'})
+    //     .populate({path:"author", select:'name authorSlug'})
+    //     .populate({path:'category', select:'name'});
 
+    
+
+    // //Update viewers
+    // await Post.findById(req.params.id, {
+    //     $addToSet:{viewers: req.connection.remoteAddress},
+    //     // $inc:{viewCount: 1}
+    // },{
+    //     new:true
+    // })
+
+    // Step 1: Get post with populated author, comments, and category
+    let post = await Post.findByPk(req.params.id,{
+        include:[
+            {
+                model:User,
+                as:'author',
+                attributes:['name', 'id']
+            },
+            {
+                model:Category,
+                as:'category',
+                attributes:['name', 'id']
+            },
+            {
+                model: Comment,
+                as:'comments',
+                attributes:['comment', 'author', 'createdAt']
+            }
+        ]
+    });
+
+    
     if(!post){
         return next(new AppError('No post was found with that ID', '', 404));
     }
 
-    //Update viewers
-    await Post.findById(req.params.id, {
-        $addToSet:{viewers: req.connection.remoteAddress},
-        // $inc:{viewCount: 1}
-    },{
-        new:true
-    })
-
+    // Step 2: Update viewers array and increment view count
+    const ipAddress = req.connection.remoteAddress;
+    let viewers = post.viewers;
+    
+    if (!viewers.includes(ipAddress)) {
+    viewers.push(ipAddress);
+    }
+    post.viewers = viewers; 
+    await post.save()
+   
     res.status(200).json({
         status:"success",
         data:{
@@ -117,15 +165,35 @@ exports.getPost = catchAsync(async(req, res, next)=>{
 
 exports.updatePost = catchAsync(async(req, res, next)=>{
     if(req.file) req.body.coverImage = req.file.filename;
-    req.body.slug = slugify(req.body.title, {lower: true})
-    const updatedPost = await Post.findByIdAndUpdate(req.params.id, req.body, {
-        runValidators:true,
-        new:true
-    });
+    // req.body.slug = slugify(req.body.title, {lower: true})
+    // const updatedPost = await Post.findByIdAndUpdate(req.params.id, req.body, {
+    //     runValidators:true,
+    //     new:true
+    // });
 
-    if(!updatedPost){
+    // const [rowsUpdated] = await Post.update(req.body, {
+    //     where: { id: req.params.id },
+    //     validate: true
+    // });
+
+    // if(!rowsUpdated){
+    //     return next(new AppError('No post was found with that ID', '', 404));
+    // }
+    // // Re-fetch the updated post
+    // const updatedPost = await Post.findByPk(req.params.id);
+
+    // Fetch the post instance first to trigger hooks
+    const post = await Post.findByPk(req.params.id);
+    if (!post) {
         return next(new AppError('No post was found with that ID', '', 404));
     }
+
+    // Update the post's properties and save it
+    await post.update(req.body, { validate: true });
+
+    // Re-fetch the updated post after updating
+    const updatedPost = await Post.findByPk(req.params.id);
+
     res.status(200).json({
         status:"success",
         data:{
@@ -135,10 +203,15 @@ exports.updatePost = catchAsync(async(req, res, next)=>{
 });
 
 exports.deletePost = catchAsync(async(req, res, next)=>{
-    const post = await Post.findByIdAndDelete(req.params.id)
+    // const post = await Post.findByIdAndDelete(req.params.id)
+    const post = await Post.findByPk(req.params.id);
+
     if(!post){
         return next(new AppError("No post was found with that ID", '', 404))
     }
+
+    // Delete the post
+    await post.destroy();
     res.status(204).json({
         status:"success",
         data:null

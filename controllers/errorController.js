@@ -41,6 +41,26 @@ const handleCastErrorDb = err =>{
 
     return new AppError('', error, 400)
 }
+
+
+//Sequelize Errors Function
+const handleSequelizeValidationError = err =>{
+    const errors = err.errors.reduce((acc, el)=>{
+        acc[el.path] = el.message
+        return acc;
+    }, {})
+    return new AppError('Invalid data supplied', errors, 400)
+}
+
+const handleSequelizeDuplicateError = err =>{
+    const errors = err.errors.reduce((acc, el)=>{
+        acc[el.path] = `${el.path}(${el.value}) is already in use. Please use another value`
+        return acc;
+    }, {});
+    return new AppError('Invalid data supplied', errors, 400)
+}
+
+
 const sendErrorProd = (err, req, res)=>{
     // A) API
     if(req.originalUrl.startsWith('/api')){
@@ -60,6 +80,7 @@ const sendErrorProd = (err, req, res)=>{
         return res.status(500).json({
             status:'error',
             message:'Some went very wrong!',
+            err
         });
     }
 
@@ -109,11 +130,20 @@ module.exports =(err, req, res, next)=>{
     }else if(process.env.NODE_ENV == 'production'){
       
         let error = err;
+
+        //Handle Mongoose Erros
         if(error.name === 'CastError') error = handleCastErrorDb(error);
         if(error.name ==='ValidationError') error = handleValidationErrorDB(error);
         if(error.code === 11000) error = handleDuplicateFieldError(error);
+        
+        //Handle JWT Errors
         if(error.name === 'JsonWebTokenError') error = handleJWTError();
         if(error.name === 'TokenExpiredError') error = handleJWTExpireError();
+        
+        //Handle sequelize Errors
+        if(error.name === 'SequelizeValidationError')error = handleSequelizeValidationError(err)
+        if(error.name === 'SequelizeUniqueConstraintError') error = handleSequelizeDuplicateError(err)
+
         sendErrorProd(error,  req, res)
     }
    

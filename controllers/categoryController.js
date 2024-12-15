@@ -1,5 +1,6 @@
 const catchAsync = require("../utils/catchAsync");
-const Category = require('./../models/categoryModel');
+// const Category = require('./../models/categoryModel');
+const Category = require('./../models/Category')
 const AppError = require('./../utils/appError')
 
 exports.createCategory = catchAsync(async(req, res, next) =>{
@@ -14,7 +15,8 @@ exports.createCategory = catchAsync(async(req, res, next) =>{
 });
 
 exports.getAllCategories = catchAsync(async(req, res, next)=>{
-    const categories = await Category.find();
+    // const categories = await Category.find();
+    const categories = await Category.findAll();
     res.status(200).json({
         status:"success",
         result:categories.length,
@@ -25,7 +27,8 @@ exports.getAllCategories = catchAsync(async(req, res, next)=>{
 });
 
 exports.deleteCategory = catchAsync(async(req, res, next)=>{
-    const category = await Category.findByIdAndDelete(req.params.id);
+    // const category = await Category.findByIdAndDelete(req.params.id);
+    const category = await Category.destroy({ where: { id: req.params.id } });
 
     if(!category){
         return next(new AppError('No category was found with that ID', '', 404));

@@ -17,8 +17,8 @@ let DB;
 if (process.env.NODE_ENV === 'development') {
     DB = process.env.DB_LOCAL;
 } else if (process.env.NODE_ENV === 'production') {
-    // DB = process.env.DB_LOCAL;
-    DB = process.env.DATABASE.replace('<PASSWORD>', process.env.DATABASE_PASSWORD);
+    DB = process.env.DB_LOCAL;
+    // DB = process.env.DATABASE.replace('<PASSWORD>', process.env.DATABASE_PASSWORD);
 }
 
 mongoose.connect(DB).then(() => {console.log('DB connection successfully')})

@@ -1,42 +1,28 @@
-const Post = require('../models/postModel');
-const Comment = require('../models/commentModel');
+// const Post = require('../models/postModel');
+const Post = require('./../models/Post')
+// const Comment = require('../models/commentModel');
+const Comment = require('./../models/Comment')
 const catchAsync = require('./../utils/catchAsync');
-const User = require('../models/userModel');
-const Category = require('../models/categoryModel');
+// const User = require('../models/userModel');
+const User = require('./../models/User')
+// const Category = require('../models/categoryModel');
+const Category = require('./../models/Category')
 const AppError = require('../utils/appError');
-// const client = require('./../utils/redis')
+const { Op } = require('sequelize');
 
-
-// exports.updateViewCount = async (req, res, next) => {
-//   const postId = req.params.slug;
-//   const uniqueVisitor = req.connection.remoteAddress; 
-  
-//   // Create a Redis set key for this post (all unique visitors for this post)
-//   const redisKey = `post:${postId}:views`;
-
-//   try {
-//     // Check if this visitor is already in the Redis set for this post
-//     const isMember = await client.sIsMember(redisKey, uniqueVisitor);
-
-//     if (!isMember) {
-//       // Increment view count in the database
-//       await Post.findOneAndUpdate(
-//         { slug: postId }, 
-//         { $inc: { viewCount: 1 } }
-//       );
-
-//       // Add visitor to the Redis set
-//       await client.sAdd(redisKey, uniqueVisitor);
-//     }
-//   } catch (error) {
-//     console.error('Error updating view count:', error);
-//   }
-//   next();
-// };
 
 exports.getOverview = catchAsync(async(req, res, next)=>{
   // 1) Get posts data from collection
-  const posts = await Post.find().populate('category').sort("-createdAt");
+  // const posts = await Post.find().populate('category').sort("-createdAt");
+  const posts = await Post.findAll({
+    include:[
+      {
+        model:Category,
+        as:"category"
+      }
+    ],
+    order: [['createdAt', 'DESC']]
+  });
   // 2) Build template
   // 3) Render that template using posts data from 1)
   res.status(200).render('index', {
@@ -75,37 +61,74 @@ exports.getPostsByCategory = catchAsync(async(req, res, next)=>{
 
 exports.getPost = catchAsync(async (req, res, next) => {
   // 1) Get the data for the requested post (including only approved comments and replies)
-  const post = await Post
-    .findOne({ slug: req.params.slug })
-    .populate('category')
-    .populate({ path: 'author', select: 'name photo' })
-    .populate({ 
-      path: 'comments', 
-      match: { status: 'approved' },  // Filter comments to only those with status 'approved'
-      select: 'comment author createdAt' 
-    });
-  
+  // const post = await Post
+  // .findOne({ slug: req.params.slug })
+  // .populate('category')
+  // .populate({ path: 'author', select: 'name photo' })
+  // .populate({ 
+  //   path: 'comments', 
+  //   match: { status: 'approved' },  // Filter comments to only those with status 'approved'
+  //   select: 'comment author createdAt' 
+  // });
+
+  const post = await Post.findOne({
+    where: { slug: req.params.slug },
+    include: [
+      { model: Category, as: 'category' },
+      { model: User, as: 'author', attributes: ['name', 'photo'] },
+      {
+        model: Comment,
+        as: 'comments',
+        attributes: ['comment', 'author', 'createdAt'],
+        where: { status: 'approved' },
+        required: false // Make comments optional
+      }
+    ]
+  });
+ 
   if (!post) {
     return next(new AppError('There is no post with that title.', '', 404));
   }
 
   //Update viewers
-  await Post.findOneAndUpdate({slug:req.params.slug}, {
-    $addToSet:{viewers: req.connection.remoteAddress},
-    // $inc:{viewCount: 1}
-  },{
-    new:true
-  })
+  // await Post.findOneAndUpdate({slug:req.params.slug}, {
+  //   $addToSet:{viewers: req.connection.remoteAddress},
+  //   // $inc:{viewCount: 1}
+  // },{
+  //   new:true
+  // })
+  const ipAddress = req.connection.remoteAddress;
+  let viewers = post.viewers;
+  
+  if (!viewers.includes(ipAddress)) {
+  viewers.push(ipAddress);
+  }
+  post.viewers = viewers; 
+  await post.save()
+
+
 
   // 2) Get related posts data from collection
-  const posts = await Post
-    .find({ slug: { $ne: req.params.slug }, category: post.category._id })
-    .populate('category');
+  // const posts = await Post
+  //   .find({ slug: { $ne: req.params.slug }, category: post.category._id })
+  //   .populate('category');
+  const posts = await Post.findAll({
+    where: {
+      slug: { [Op.ne]: req.params.slug },  
+      categoryId: post.category.id
+    },
+    include: [
+      {
+        model: Category,         
+        as: 'category'
+      }
+    ]
+  });
 
   // 3) Build template
   // 4) Render template using data from 1)
   res.status(200).render('post', {
-    title: `${post.title}`,
+    title:  `${post.title}`,
     post,
     posts
   });
