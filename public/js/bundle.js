@@ -13232,7 +13232,7 @@ var getSidebarPosts = exports.getSidebarPosts = /*#__PURE__*/function () {
                 day: '2-digit',
                 month: 'short',
                 year: 'numeric'
-              }), "\n                </span>\n              </li>\n              <li class=\"float-left mr-2 text-[10px] font-medium uppercase text-slate-400\">\n                <span class=\"flex items-center\">\n                  <i class=\"fas fa-comments mr-1 text-primary\"></i>\n                  ").concat(post.commentCount, "\n                </span>\n              </li>\n              <li class=\"float-left mr-2 text-[10px] font-medium uppercase text-slate-400\">\n                <span class=\"flex items-center\">\n                  <i class=\"fas fa-eye mr-1 text-primary\"></i>\n                    ").concat(post.viewers.length, "\n                </span>\n              </li>\n            </ul>\n          </div>\n        </div>\n      ");
+              }), "\n                </span>\n              </li>\n              <li class=\"float-left mr-2 text-[10px] font-medium uppercase text-slate-400\">\n                <span class=\"flex items-center\">\n                  <i class=\"fas fa-comments mr-1 text-primary\"></i>\n                  ").concat(post.commentCount, "\n                </span>\n              </li>\n              <li class=\"float-left mr-2 text-[10px] font-medium uppercase text-slate-400\">\n                <span class=\"flex items-center\">\n                  <i class=\"fas fa-eye mr-1 text-primary\"></i>\n                    ").concat(post.viewCount, "\n                </span>\n              </li>\n            </ul>\n          </div>\n        </div>\n      ");
               container.insertAdjacentHTML('beforeend', el);
             });
           }
@@ -13457,15 +13457,15 @@ var getCategories = exports.getCategories = /*#__PURE__*/function () {
           if (res.data.status === 'success') {
             res.data.data.categories.forEach(function (cat) {
               if (type === 'select') {
-                var option = "<option value=".concat(cat._id, ">").concat(cat.name, "</option>");
+                var option = "<option value=".concat(cat.id, ">").concat(cat.name, "</option>");
                 element.insertAdjacentHTML('beforeEnd', option);
               }
               if (type === 'home-categories') {
-                var markup = "\n                        <li>\n                            <a href='/category/".concat(cat.name, "/").concat(cat._id, "' class='cat_links inline-block py-2 px-3 font-semibold uppercase transition-all duration-100 hover:bg-primary-light hover:text-white text-[10px]'> ").concat(cat.name, " </a>\n                        </li>   \n                    ");
+                var markup = "\n                        <li>\n                            <a href='/category/".concat(cat.name, "/").concat(cat.id, "' class='cat_links inline-block py-2 px-3 font-semibold uppercase transition-all duration-100 hover:bg-primary-light hover:text-white text-[10px]'> ").concat(cat.name, " </a>\n                        </li>   \n                    ");
                 element.innerHTML += markup;
               }
               if (type === 'sidebar') {
-                var _markup = "\n                    <li>\n                        <a href='/category/".concat(cat.name, "/").concat(cat._id, "' class='inline-block py-2 px-3 mb-2 rounded font-semibold uppercase text-[10px] transition-all duration-100 hover:bg-primary-light bg-dark text-white'> ").concat(cat.name, " </a>\n                    </li>   \n                ");
+                var _markup = "\n                    <li>\n                        <a href='/category/".concat(cat.name, "/").concat(cat.id, "' class='inline-block py-2 px-3 mb-2 rounded font-semibold uppercase text-[10px] transition-all duration-100 hover:bg-primary-light bg-dark text-white'> ").concat(cat.name, " </a>\n                    </li>   \n                ");
                 element.innerHTML += _markup;
               }
             });

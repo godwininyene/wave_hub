@@ -29,7 +29,7 @@ router
 
 
 router.route('/')
-.get(authController.restrictTo('admin'), userController.getAllUser)
+.get(authController.restrictTo('admin'), userController.getAllUsers)
 
 router.route('/:id')
 .get(userController.getUser)

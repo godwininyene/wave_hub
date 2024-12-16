@@ -9,7 +9,7 @@ const User = require('./../models/User')
 const Category = require('./../models/Category')
 const AppError = require('../utils/appError');
 const { Op } = require('sequelize');
-
+const sequelize = require('./../utils/sequelize')
 
 exports.getOverview = catchAsync(async(req, res, next)=>{
   // 1) Get posts data from collection
@@ -33,9 +33,22 @@ exports.getOverview = catchAsync(async(req, res, next)=>{
 
 exports.getAuthorPosts = catchAsync(async(req, res, next)=>{
   // 1) Get posts data from collection
-  const posts = await Post.find({ author: req.params.author_id }).populate('category').sort('-createdAt');
-  const author = await User.findById(req.params.author_id).select('name -_id');
-  const author_name = author?.name; // Extracts the name field
+  // const posts = await Post.find({ author: req.params.author_id }).populate('category').sort('-createdAt');
+  // const author = await User.findById(req.params.author_id).select('name -_id');
+  // const author_name = author?.name; // Extracts the name field
+
+  const posts = await Post.findAll({
+    where:{authorId: req.params.author_id},
+    order:[["createdAt", "DESC"]],
+    include:[
+      {model:Category, as: 'category'}
+    ]
+  });
+ 
+  const author = await User.findByPk(req.params.author_id, {
+    attributes:['name', 'id']    
+  });
+  const author_name = author?.name
   // 2) Build template
   // 3) Render that template using posts data from 1)
   res.status(200).render('author_posts', {
@@ -47,8 +60,19 @@ exports.getAuthorPosts = catchAsync(async(req, res, next)=>{
 
 exports.getPostsByCategory = catchAsync(async(req, res, next)=>{
   // 1) Get posts data from collection
-  const posts = await Post.find({ category: req.params.cat_id }).populate('category').sort('-createdAt');
-  const category = await Category.findById(req.params.cat_id).select('name -_id');
+  // const posts = await Post.find({ category: req.params.cat_id }).populate('category').sort('-createdAt');
+  // const category = await Category.findById(req.params.cat_id).select('name -_id');
+  // const category_name = category?.name; // Extracts the name field
+
+  const posts = await Post.findAll({
+    where:{categoryId : req.params.cat_id},
+    order:[["createdAt", "DESC"]],
+    include:[{model: Category, as:'category'}]
+
+  });
+  const category = await Category.findByPk(req.params.cat_id, {
+    attributes:['name', 'id']
+  })
   const category_name = category?.name; // Extracts the name field
   // 2) Build template
   // 3) Render that template using posts data from 1)
@@ -75,7 +99,7 @@ exports.getPost = catchAsync(async (req, res, next) => {
     where: { slug: req.params.slug },
     include: [
       { model: Category, as: 'category' },
-      { model: User, as: 'author', attributes: ['name', 'photo'] },
+      { model: User, as: 'author', attributes: ['name', 'photo', 'id'] },
       {
         model: Comment,
         as: 'comments',
@@ -97,16 +121,14 @@ exports.getPost = catchAsync(async (req, res, next) => {
   // },{
   //   new:true
   // })
-  const ipAddress = req.connection.remoteAddress;
-  let viewers = post.viewers;
-  
-  if (!viewers.includes(ipAddress)) {
-  viewers.push(ipAddress);
+  const viewerIp = req.connection.remoteAddress;
+  const viewers = post.viewers
+  if (!viewers.includes(viewerIp)) {
+    viewers.push(viewerIp);
+    post.setDataValue('viewers', JSON.stringify(viewers)); // Avoid setter hooks
+    post.viewCount += 1;
+    await post.save({ hooks: false }); // Disable to prevent Sequelize from re-calling the getter
   }
-  post.viewers = viewers; 
-  await post.save()
-
-
 
   // 2) Get related posts data from collection
   // const posts = await Post
@@ -165,15 +187,24 @@ exports.getLoginForm = (req, res, next) => {
 
 exports.getDashboard = async(req, res, next)=>{
 
-  const stats = {
-    posts: await Post.countDocuments(),
-    published_posts: await Post.countDocuments({status: 'published'}),
-    draft_posts: await Post.countDocuments({status: 'draft'}),
-    comments: await Comment.countDocuments(),
-    pending_comments: await Comment.countDocuments({status: 'pending'}),
-    categories: await Category.countDocuments(),
-    users: await User.countDocuments(),
+  // const stats = {
+  //   posts: await Post.countDocuments(),
+  //   published_posts: await Post.countDocuments({status: 'published'}),
+  //   draft_posts: await Post.countDocuments({status: 'draft'}),
+  //   comments: await Comment.countDocuments(),
+  //   pending_comments: await Comment.countDocuments({status: 'pending'}),
+  //   categories: await Category.countDocuments(),
+  //   users: await User.countDocuments(),
     
+  // }
+  const stats = {
+    posts: await Post.count(),
+    published_posts: await Post.count({where:{status: 'published'}}),
+    draft_posts: await Post.count({where:{status: 'draft'}}),
+    comments: await Comment.count(),
+    pending_comments: await Comment.count({where:{status: 'pending'}}),
+    categories: await Category.count(),
+    users: await User.count(),
   }
   res.status(200).render('admin/dashboard',{
     title:"Dashboard",
@@ -187,18 +218,42 @@ exports.getManagePost = catchAsync(async(req, res , next)=>{
   //Allowed for fetching post to be edited
   let post;
   if(req.query.p_id){
-    post = await Post.findById(req.query.p_id);
+    // post = await Post.findById(req.query.p_id);
+    post = await Post.findByPk(req.query.p_id)
     if (!post) {
       return next(new AppError('There is no post with that ID.', '', 404));
     }
   }
  
   // 1) Get posts data from collection
-  const posts = await Post
-  .find().populate('category')
-  .populate({path: 'author',  select:'name'})
-  .populate({path: 'comments', select:'author'})
-  .sort("-createdAt");
+  // const posts = await Post
+  // .find().populate('category')
+  // .populate({path: 'author',  select:'name'})
+  // .populate({path: 'comments', select:'author'})
+  // .sort("-createdAt");
+
+  const posts = await Post.findAll({
+    order:[["createdAt", "DESC"]],
+    include:[
+      {
+        model:Category,
+        as:'category'
+      },
+      {
+        model:User,
+        as:"author",
+        attributes:['name']
+
+      },
+      {
+        model:Comment,
+        as:'comments',
+        attributes:['author']
+      }
+    ]
+  });
+
+ 
   res.status(200).render('admin/posts',{
     posts,
     post,
@@ -208,7 +263,8 @@ exports.getManagePost = catchAsync(async(req, res , next)=>{
 });
 
 exports.getCategories = catchAsync(async(req, res, next)=>{
-  const categories = await Category.find();
+  // const categories = await Category.find();
+  const categories = await Category.findAll();
   res.status(200).render('admin/categories',{
     title:'Manage categories',
     categories
@@ -227,7 +283,8 @@ exports.getComments = catchAsync(async(req, res, next)=>{
 
 exports.getUsers = catchAsync(async(req, res, next)=>{
   const source = req.query.source;
-  const users = await User.find();
+  // const users = await User.find();
+  const users = await User.findAll();
   res.status(200).render('admin/users',{
     source,
     users,
@@ -240,17 +297,17 @@ exports.getAccount = catchAsync(async(req, res, next)=>{
   })
 });
 
-exports.updateUserData = catchAsync(async(req, res, next)=>{
-  const updatedUser = await User.findByIdAndUpdate(req.user._id, {
-    name:req.body.name,
-    email:req.body.email
-  }, {
-    new:true,
-    runValidators:true
-  });
+// exports.updateUserData = catchAsync(async(req, res, next)=>{
+//   const updatedUser = await User.findByIdAndUpdate(req.user._id, {
+//     name:req.body.name,
+//     email:req.body.email
+//   }, {
+//     new:true,
+//     runValidators:true
+//   });
   
-  res.status(200).render("admin/profile", {
-    title:"Your account ",
-    user:updatedUser
-  });
-})
+//   res.status(200).render("admin/profile", {
+//     title:"Your account ",
+//     user:updatedUser
+//   });
+// })

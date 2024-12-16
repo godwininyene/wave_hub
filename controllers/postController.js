@@ -45,14 +45,14 @@ exports.resizeCoverPhoto = (req, res, next)=>{
 exports.aliasPopularPosts = (req, res, next)=>{
     req.query.limit = '5';
     req.query.sort='-viewCount,-commentCount'
-    req.query.fields='title,coverImage,createdAt,viewers,commentCount,slug'
+    req.query.fields='title,coverImage,createdAt,viewCount,commentCount,slug'
     next();
 }
 
 exports.aliasRecentPosts = (req, res, next)=>{
     req.query.limit = '5';
     req.query.sort='-createdAt'
-    req.query.fields='title,coverImage, createdAt ,viewers ,commentCount,slug'
+    req.query.fields='title,coverImage, createdAt ,viewCount ,commentCount,slug'
     next();
 }
 
@@ -146,14 +146,14 @@ exports.getPost = catchAsync(async(req, res, next)=>{
     }
 
     // Step 2: Update viewers array and increment view count
-    const ipAddress = req.connection.remoteAddress;
-    let viewers = post.viewers;
-    
-    if (!viewers.includes(ipAddress)) {
-    viewers.push(ipAddress);
+    const viewerIp = req.connection.remoteAddress;
+    const viewers = post.viewers
+    if (!viewers.includes(viewerIp)) {
+        viewers.push(viewerIp);
+        post.setDataValue('viewers', JSON.stringify(viewers)); // Avoid setter hooks
+        post.viewCount += 1;
+        await post.save({ hooks: false }); // Disable to prevent Sequelize from re-calling the getter
     }
-    post.viewers = viewers; 
-    await post.save()
    
     res.status(200).json({
         status:"success",
@@ -189,11 +189,7 @@ exports.updatePost = catchAsync(async(req, res, next)=>{
     }
 
     // Update the post's properties and save it
-    await post.update(req.body, { validate: true });
-
-    // Re-fetch the updated post after updating
-    const updatedPost = await Post.findByPk(req.params.id);
-
+    const updatedPost = await post.update(req.body, { validate: true});
     res.status(200).json({
         status:"success",
         data:{

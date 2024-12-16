@@ -52,7 +52,7 @@ export const getSidebarPosts = async (type) => {
               <li class="float-left mr-2 text-[10px] font-medium uppercase text-slate-400">
                 <span class="flex items-center">
                   <i class="fas fa-eye mr-1 text-primary"></i>
-                    ${post.viewers.length}
+                    ${post.viewCount}
                 </span>
               </li>
             </ul>

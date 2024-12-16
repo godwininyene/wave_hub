@@ -64,7 +64,11 @@ Post.init(
             type: DataTypes.JSON, // Stores an array of viewers 
             allowNull:false,
             defaultValue: []
+            
         },
+
+       
+      
         
         tags:DataTypes.STRING,
         status: {
@@ -92,23 +96,27 @@ Post.init(
         modelName:"Post",
         getterMethods: {
             viewers() {
-              try {
-                const rawData = this.getDataValue('viewers'); 
-                if (!rawData) return []; // Handle empty string, null, or undefined
-                
-                if (typeof rawData === 'string') {
-                  const parsedData = JSON.parse(rawData); // Parse string to array
+                try {
+                  const rawData = this.getDataValue('viewers'); 
+                  if (!rawData) return []; // Handle empty string, null, or undefined
+              
+                  let parsedData = rawData;
+                  // Step 1: If the rawData is a string, parse it once
+                  if (typeof rawData === 'string') {
+                    parsedData = JSON.parse(rawData);
+                  }
+                  // Step 2: If after parsing, it is still a string, parse it again
+                  if (typeof parsedData === 'string') {
+                    parsedData = JSON.parse(parsedData);
+                  }
                   if (!Array.isArray(parsedData)) return []; 
                   return parsedData; 
+                } catch (error) {
+                  console.error('Error parsing viewers JSON:', error.message);
+                  return []; 
                 }
-                if (Array.isArray(rawData)) return rawData; 
-                
-                return []; 
-              } catch (error) {
-                console.error('Error parsing viewers JSON:', error.message);
-                return []; 
-              }
             }
+              
         },
         setterMethods: {
             viewers(value) {
@@ -153,4 +161,6 @@ Post.belongsTo(User, { foreignKey: 'authorId', as: 'author' }); // One-to-Many (
 Post.belongsTo(Category, { foreignKey: 'categoryId', as: 'category' }); // One-to-Many (Category can have many posts)
 Post.hasMany(Comment, { foreignKey: 'postId', as: 'comments' }); // One-to-Many (Post can have many comments)
 
+
 module.exports = Post;
+

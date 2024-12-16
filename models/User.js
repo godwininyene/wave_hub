@@ -88,14 +88,14 @@ User.init(
         sequelize,
         modelName:'User',
         hooks:{
-            beforeCreate:async(user)=>{
-                if(user.password){
-                    user.password = await bcrypt.hash(user.password, 12)
-                }
-            },
-            beforeUpdate: async (user) => {
-                if (user.password) {
-                  user.password = await bcrypt.hash(user.password, 12);
+            beforeSave: async (user) => {
+                // 1. Hash password if it's new or changed
+                if (user.changed('password')) {
+                    user.password = await bcrypt.hash(user.password, 12);
+                    // // 2. Set passwordChangedAt only when updating existing users
+                    if (!user.isNewRecord) {
+                      user.passwordChangedAt = Date.now() - 1000;
+                    }
                 }
             }
         },

@@ -1,6 +1,7 @@
 const AppError = require("../utils/appError");
 const catchAsync = require("../utils/catchAsync");
-const User = require('./../models/userModel')
+// const User = require('./../models/userModel')
+const User = require('./../models/User')
 const multer = require('multer');
 const sharp = require('sharp');
 
@@ -25,7 +26,7 @@ exports.uploadUserPhoto = upload.single("photo");
 exports.resizeUserPhoto = catchAsync(async(req, res, next)=>{
     if(!req.file) return next();
 
-    req.file.filename = `user-${req.user._id}-${Date.now()}.jpeg`;
+    req.file.filename = `user-${req.user.id}-${Date.now()}.jpeg`;
 
     await sharp(req.file.buffer)
     .resize(500, 500)
@@ -45,7 +46,8 @@ const filterObj = (obj, ...allowedFields) => {
 };
 
 exports.getMe = (req, res, next)=>{
-    req.params.id = req.user._id;
+    // req.params.id = req.user._id;
+    req.params.id = req.user.id;
     next();
 }
 
@@ -58,10 +60,13 @@ exports.updateMe = catchAsync(async (req, res, next) => {
     const filteredBody = filterObj(req.body, 'name', 'email');
     if(req.file) filteredBody.photo = req.file.filename
     //3) Update user document
-    const updatedUser = await User.findByIdAndUpdate(req.user._id, filteredBody, {
-        new: true,
-        runValidators: true
-    });
+    // const updatedUser = await User.findByIdAndUpdate(req.user._id, filteredBody, {
+    //     new: true,
+    //     runValidators: true
+    // });
+
+    const user = await User.findByPk(req.user.id);
+    const updatedUser = await user.update(filteredBody, {validate:true})
     
     res.status(200).json({
         status: 'success',
@@ -70,8 +75,9 @@ exports.updateMe = catchAsync(async (req, res, next) => {
         }
     })
 });
-exports.getAllUser = catchAsync(async(req, res, next)=>{
-    const users = await User.find();
+exports.getAllUsers = catchAsync(async(req, res, next)=>{
+    // const users = await User.find();
+    const users = await User.findAll();
     res.status(200).json({
         status:"success",
         result:users.length,
@@ -82,7 +88,8 @@ exports.getAllUser = catchAsync(async(req, res, next)=>{
 });
 
 exports.getUser = catchAsync(async(req, res, next)=>{
-    const user = await User.findById(req.params.id)
+    // const user = await User.findById(req.params.id)
+    const user = await User.findByPk(req.params.id)
     if(!user){
         return next(new AppError('No user was found with that ID', '', 404));
     }

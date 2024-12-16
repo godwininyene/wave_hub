@@ -24,7 +24,7 @@ router.get('/manage_comments', viewsController.getComments);
 router.get('/manage_users', viewsController.getUsers);
 router.get('/me', viewsController.getAccount);
 
-router.post('/submit-user-data', authController.protect, viewsController.updateUserData)
+// router.post('/submit-user-data', authController.protect, viewsController.updateUserData)
 
 module.exports = router;
 
