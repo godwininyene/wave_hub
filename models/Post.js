@@ -4,9 +4,9 @@ const slugify = require('slugify');
 
 class Post extends Model{
     static associate(models) {
-        Post.belongsTo(models.User, { foreignKey: 'authorId', as: 'author' });
-        Post.belongsTo(models.Category, { foreignKey: 'categoryId', as: 'category' });
-        Post.hasMany(models.Comment, { foreignKey: 'postId', as: 'comments' });
+        Post.belongsTo(models.User, { foreignKey: 'authorId', as: 'author' })// One-to-Many (User can have many posts;
+        Post.belongsTo(models.Category, { foreignKey: 'categoryId', as: 'category' }) // One-to-Many (Category can have many posts;
+        Post.hasMany(models.Comment, { foreignKey: 'postId', as: 'comments' }) // One-to-Many (Post can have many comments;
     }
 }
 Post.init(
@@ -154,10 +154,5 @@ Post.init(
         }
     }
 )
-// Model Associations
-// Post.belongsTo(User, { foreignKey: 'authorId', as: 'author' }); // One-to-Many (User can have many posts)
-// Post.belongsTo(Category, { foreignKey: 'categoryId', as: 'category' }); // One-to-Many (Category can have many posts)
-// Post.hasMany(Comment, { foreignKey: 'postId', as: 'comments' }); // One-to-Many (Post can have many comments)
-
 module.exports = Post;
 

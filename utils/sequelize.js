@@ -1,5 +1,4 @@
 const { Sequelize } = require('sequelize');
-
 const sequelize = new Sequelize(
   process.env.MYSQL_DATABASE, 
   process.env.MYSQL_USERNAME, 
@@ -8,8 +7,6 @@ const sequelize = new Sequelize(
   dialect: 'mysql',
   logging:false
 });
-
-
 
 sequelize.authenticate()
   .then(() => {

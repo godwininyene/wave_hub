@@ -105,8 +105,7 @@ block content
                         i(class="fas fa-clock  mr-1  text-primary ")
                         - const date = post.createdAt.toLocaleString('en-us', {day:'numeric', month: 'long', year: 'numeric'})
                         |#{date}
-                      p(class="text-left text-xs leading-6 pb-3 font-semibold text-slate-500")
-                        |#{post.content.split(" ").slice(0, 23).join(" ")}...
+                      p(class="text-left text-xs leading-6 pb-3 font-semibold text-slate-500")!= post.content.length > 23 ? post.content.split(" ").slice(0, 23).join(" ") + "..." : post.content
               //Post 1 End
             else 
               h1(class='bg-red-200 p-5 w-full text-center col-span-2') No post was found in this category at the moment. Please check back later.

@@ -106,7 +106,7 @@ User.init(
         // Custom scopes (e.g., if you want to include password in specific queries)
         scopes: {
             withPassword: {
-            attributes: { include: ['password'] }
+                attributes: { include: ['password'] }
             }
         },
     }
