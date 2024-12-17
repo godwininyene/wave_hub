@@ -34,7 +34,7 @@ html(lang="en")
 
         //MODAL
         #modal.h-screen.invisible.opacity-0.w-full.fixed.top-0.left-0.bg-black.bg-opacity-80.transition-all.duration-300(class='z-[9999]')
-            #modal-dialog.text-center.opacity-0.invisible.mx-auto.mt-36.bg-white.shadow-2xl.relative.transition-all.duration-500.rounded-lg.text-base(class='w-[30%]')
+            #modal-dialog.text-center.opacity-0.invisible.mx-auto.mt-36.bg-white.shadow-2xl.relative.transition-all.duration-500.rounded-lg.text-base(class='w-[80%] lg:w-[30%]')
                 #modal-content.text-center
                     #modal-header.relative.p-4.border-b.border-b-gray-300
                         p.-mt-7.mb-4
@@ -49,10 +49,10 @@ html(lang="en")
                             span.font-semibold  Do you want to proceed?
                     #modal-footer.flex.gap-2.items-center.justify-center.p-4
                         button(id='modal-yes-btn').bg-primary.text-white.py-1.px-3.rounded-md.inline-flex.items-center.gap-1
-                            i.fas.fa-thumbs-up.w-4.h-4.inline
+                            i.fas.fa-thumbs-up.w-4.h-4.inline(id="yes-icon")
                             |  Yes
                         button.bg-red-500.text-white.py-1.px-3.rounded-md.inline-flex.items-center.gap-1(onclick='hideModal()')
-                            i.far.fa-times-circle.w-4.h-4.inline(id="yes-icon")
+                            i.far.fa-times-circle.w-4.h-4.inline
                             |  Cancel
 
     script(src='/js/vendors/ckeditor.js')
