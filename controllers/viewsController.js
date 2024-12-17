@@ -1,15 +1,12 @@
 // const Post = require('../models/postModel');
-const Post = require('./../models/Post')
 // const Comment = require('../models/commentModel');
-const Comment = require('./../models/Comment')
-const catchAsync = require('./../utils/catchAsync');
-// const User = require('../models/userModel');
-const User = require('./../models/User')
+// const User = require('./../models/userModel')
 // const Category = require('../models/categoryModel');
-const Category = require('./../models/Category')
+const {Post, Comment, Category, User} = require('./../models');
+const catchAsync = require('./../utils/catchAsync');
 const AppError = require('../utils/appError');
 const { Op } = require('sequelize');
-const sequelize = require('./../utils/sequelize')
+
 
 exports.getOverview = catchAsync(async(req, res, next)=>{
   // 1) Get posts data from collection
@@ -104,6 +101,7 @@ exports.getPost = catchAsync(async (req, res, next) => {
         model: Comment,
         as: 'comments',
         attributes: ['comment', 'author', 'createdAt'],
+        order:[["createdAt", "DESC"]],
         where: { status: 'approved' },
         required: false // Make comments optional
       }
@@ -113,7 +111,6 @@ exports.getPost = catchAsync(async (req, res, next) => {
   if (!post) {
     return next(new AppError('There is no post with that title.', '', 404));
   }
-
   //Update viewers
   // await Post.findOneAndUpdate({slug:req.params.slug}, {
   //   $addToSet:{viewers: req.connection.remoteAddress},
@@ -219,7 +216,8 @@ exports.getManagePost = catchAsync(async(req, res , next)=>{
   let post;
   if(req.query.p_id){
     // post = await Post.findById(req.query.p_id);
-    post = await Post.findByPk(req.query.p_id)
+    post = await Post.findByPk(req.query.p_id);
+   
     if (!post) {
       return next(new AppError('There is no post with that ID.', '', 404));
     }
@@ -273,7 +271,17 @@ exports.getCategories = catchAsync(async(req, res, next)=>{
 
 exports.getComments = catchAsync(async(req, res, next)=>{
   // 1) Get comments data from collection
-  const comments = await Comment.find().populate({path: 'post', select:'title slug'}).sort("-createdAt"); 
+  // const comments = await Comment.find().populate({path: 'post', select:'title slug'}).sort("-createdAt"); 
+  const comments = await Comment.findAll({
+    order:[["createdAt", "DESC"]],
+    include:[
+      {
+        model:Post,
+        as:'post',
+        attributes:['title', 'slug']
+      }
+    ]
+  });
  
   res.status(200).render('admin/comments',{
     title:'Manage Comments',
@@ -296,18 +304,3 @@ exports.getAccount = catchAsync(async(req, res, next)=>{
       title:"Your account "
   })
 });
-
-// exports.updateUserData = catchAsync(async(req, res, next)=>{
-//   const updatedUser = await User.findByIdAndUpdate(req.user._id, {
-//     name:req.body.name,
-//     email:req.body.email
-//   }, {
-//     new:true,
-//     runValidators:true
-//   });
-  
-//   res.status(200).render("admin/profile", {
-//     title:"Your account ",
-//     user:updatedUser
-//   });
-// })

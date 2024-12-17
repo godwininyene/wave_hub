@@ -1,8 +1,11 @@
 const{DataTypes, Model} = require('sequelize');
 const sequelize = require('./../utils/sequelize');
-const Post = require('./../models/Post')
 
-class Comment extends Model{}
+class Comment extends Model{
+    static associate(models) {
+        Comment.belongsTo(models.Post, { foreignKey: 'postId', as: 'post' });
+    }
+}
 
 Comment.init(
     //Model Attributes
@@ -57,7 +60,4 @@ Comment.init(
         modelName:"Comment"
     }
 );
-
-// Association
-// Comment.belongsTo(Post);
 module.exports = Comment;

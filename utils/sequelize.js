@@ -1,9 +1,15 @@
 const { Sequelize } = require('sequelize');
 
-const sequelize = new Sequelize('wave_hub', 'root', '', {
-  host: 'localhost',
-  dialect: 'mysql'
+const sequelize = new Sequelize(
+  process.env.MYSQL_DATABASE, 
+  process.env.MYSQL_USERNAME, 
+  process.env.MYSQL_PASSWORD, {
+  host: process.env.MYSQL_HOST,
+  dialect: 'mysql',
+  logging:false
 });
+
+
 
 sequelize.authenticate()
   .then(() => {

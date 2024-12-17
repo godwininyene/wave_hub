@@ -1,11 +1,14 @@
 const {DataTypes, Model} = require('sequelize');
 const sequelize = require('./../utils/sequelize');
 const slugify = require('slugify');
-const User = require('./User'); 
-const Category = require('./Category'); 
-const Comment = require('./Comment'); 
 
-class Post extends Model{}
+class Post extends Model{
+    static associate(models) {
+        Post.belongsTo(models.User, { foreignKey: 'authorId', as: 'author' });
+        Post.belongsTo(models.Category, { foreignKey: 'categoryId', as: 'category' });
+        Post.hasMany(models.Comment, { foreignKey: 'postId', as: 'comments' });
+    }
+}
 Post.init(
     //Model Attributes
     {
@@ -66,10 +69,6 @@ Post.init(
             defaultValue: []
             
         },
-
-       
-      
-        
         tags:DataTypes.STRING,
         status: {
             type: DataTypes.ENUM('published', 'pending', 'draft'),
@@ -155,12 +154,10 @@ Post.init(
         }
     }
 )
-
 // Model Associations
-Post.belongsTo(User, { foreignKey: 'authorId', as: 'author' }); // One-to-Many (User can have many posts)
-Post.belongsTo(Category, { foreignKey: 'categoryId', as: 'category' }); // One-to-Many (Category can have many posts)
-Post.hasMany(Comment, { foreignKey: 'postId', as: 'comments' }); // One-to-Many (Post can have many comments)
-
+// Post.belongsTo(User, { foreignKey: 'authorId', as: 'author' }); // One-to-Many (User can have many posts)
+// Post.belongsTo(Category, { foreignKey: 'categoryId', as: 'category' }); // One-to-Many (Category can have many posts)
+// Post.hasMany(Comment, { foreignKey: 'postId', as: 'comments' }); // One-to-Many (Post can have many comments)
 
 module.exports = Post;
 

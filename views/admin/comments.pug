@@ -5,15 +5,17 @@ block content
             thead
                 tr.border
                     th.py-1.px-3 Author
+                     th.py-1.px-3 Email
                     th.py-1.px-3 Comment
                     th.py-1.px-3 Status
-                    th.py-1.px-3 In Response to
+                    th.py-1.px-3 Post
                     th.py-1.px-3 Date
                     th.py-1.px-3 Action
             tbody
                 each comment in comments
                     tr.text-center(class='hover:bg-gray-100')
                         td.p-2.border=comment.author
+                         td.p-2.border=comment.email
                         td.p-2.border=comment.comment
                         td.p-2.border.capitalize=comment.status
                         td.p-2.border 
@@ -22,11 +24,11 @@ block content
                         td.p-2.border= date
                         td.p-2.border
                             if (comment.status === 'pending' || comment.status === 'disapproved')
-                                button.py-1.px-2.text-primary.comment-approval-btn(data-status='approved', data-id=`${comment._id}`)
+                                button.py-1.px-2.text-primary.comment-approval-btn(data-status='approved', data-id=`${comment.id}`)
                                     i.fas.fa-circle-check
                             else 
-                              button.py-1.px-2.text-red-500.comment-approval-btn(data-status='disapproved', data-id=`${comment._id}`)
+                              button.py-1.px-2.text-red-500.comment-approval-btn(data-status='disapproved', data-id=`${comment.id}`)
                                 i.fas.fa-times-circle
     
-                            button.py-1.px-2.text-red-500.delete-comment-btn(data-id=`${comment._id}` type='button')
+                            button.py-1.px-2.text-red-500.delete-comment-btn(data-id=`${comment.id}` type='button')
                                 i.fas.fa-trash-alt

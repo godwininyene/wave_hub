@@ -1,6 +1,6 @@
 const catchAsync = require("../utils/catchAsync");
 // const Category = require('./../models/categoryModel');
-const Category = require('./../models/Category')
+const {Post, Category} = require('./../models');
 const AppError = require('./../utils/appError')
 
 exports.createCategory = catchAsync(async(req, res, next) =>{

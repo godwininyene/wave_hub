@@ -1,6 +1,6 @@
 const catchAsync = require("../utils/catchAsync");
 // const Comment = require('./../models/commentModel');
-const Comment = require('./../models/Comment')
+const {Post, Comment} = require('./../models');
 const AppError = require('./../utils/appError');
 
 exports.createComment = catchAsync(async(req, res, next)=>{
@@ -18,7 +18,14 @@ exports.createComment = catchAsync(async(req, res, next)=>{
 exports.getComments = catchAsync(async(req, res, next)=>{
     //Allowed for nested routes
     let filter = {
-        order: [['createdAt','DESC']]
+        order: [['createdAt','DESC']],
+        include:[
+            {
+                model:Post,
+                as:'post',
+                attributes:['title', 'slug']
+            }
+        ]
     };
     // if(req.params.postId) filter={post: req.params.postId}
     // const comments = await Comment.find(filter);

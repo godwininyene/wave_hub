@@ -1,8 +1,12 @@
-const {DataTypes} = require('sequelize');
+const {DataTypes, Model} = require('sequelize');
 const sequelize = require('./../utils/sequelize');
-const Post = require('./../models/Post')
 
-const Category = sequelize.define("Category", 
+class Category extends Model{
+    static associate(models){
+        Category.hasMany(models.Post, {as: 'posts'})
+    }
+}
+Category.init(
     //Model Attributes
     {
         name:{
@@ -14,8 +18,10 @@ const Category = sequelize.define("Category",
             unique:true
         }
     },
-    //Other model options
+    //Other Model Options
     {
+        sequelize,
+        modelName:"Category",
         hooks: {
             beforeValidate: (category) => {
               if (category.name) {
@@ -25,6 +31,5 @@ const Category = sequelize.define("Category",
         }
     }
 );
-//Associations
-// Category.hasMany(Post);
+
 module.exports = Category
