@@ -43,6 +43,13 @@ Comment.init(
                 notEmpty: { msg: 'Comment cannot be empty!' },
             }
         },
+        authorId:{
+            type:DataTypes.INTEGER,
+            allowNull:false,
+            validate:{
+                notNull: { msg: 'Comment  must belong to a post author.'},
+            }
+        },
         status:{
             type:DataTypes.ENUM('pending', 'approved', 'disapproved'),
             defaultValue:'pending',

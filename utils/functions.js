@@ -1,14 +1,15 @@
 const uuid = require('uuid');
-const BrowserFingerprint = require('browser-fingerprint');
+// const BrowserFingerprint = require('browser-fingerprint');
 
 // Initialize the fingerprinting library
-const fingerprint = new BrowserFingerprint();
+// const fingerprint = new BrowserFingerprint();
 
 // Function to generate a unique session ID
-const generateSessionId = req=> {
-  const fingerprintData = fingerprint.getFingerprint(req);
+exports.generateSessionId = req=> {
+  // const fingerprintData = fingerprint.getFingerprint(req);
   const sessionId = uuid.v4();
-  return `${sessionId}:${fingerprintData}`;
+  return sessionId
+  // return `${sessionId}:${fingerprintData}`;
 }
 
 // Function to check if a user has already viewed a post
@@ -24,13 +25,13 @@ async function hasUserViewedPost(req, postId) {
 }
 
 // Route to handle post views
-app.get('/posts/:postId', async (req, res) => {
-    const postId = req.params.postId;
-    if (!await hasUserViewedPost(req, postId)) {
-      const post = await Post.findByPk(postId);
-      post.viewCount += 1;
-      await post.save();
-      const viewedPost = await ViewedPost.create({ postId, sessionId: generateSessionId(req) });
-    }
-    res.send(`You are viewing post ${postId}`);
-  });
+// app.get('/posts/:postId', async (req, res) => {
+//     const postId = req.params.postId;
+//     if (!await hasUserViewedPost(req, postId)) {
+//       const post = await Post.findByPk(postId);
+//       post.viewCount += 1;
+//       await post.save();
+//       const viewedPost = await ViewedPost.create({ postId, sessionId: generateSessionId(req) });
+//     }
+//     res.send(`You are viewing post ${postId}`);
+//   });

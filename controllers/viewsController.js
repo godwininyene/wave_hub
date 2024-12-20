@@ -6,9 +6,12 @@ const {Post, Comment, Category, User} = require('./../models');
 const catchAsync = require('./../utils/catchAsync');
 const AppError = require('../utils/appError');
 const { Op } = require('sequelize');
+const { generateSessionId } = require('../utils/functions');
 
 
 exports.getOverview = catchAsync(async(req, res, next)=>{
+  const y = generateSessionId(req)
+  console.log(y)
   // 1) Get posts data from collection
   // const posts = await Post.find().populate('category').sort("-createdAt");
   const posts = await Post.findAll({
@@ -195,13 +198,30 @@ exports.getDashboard = async(req, res, next)=>{
     
   // }
   const stats = {
-    posts: await Post.count(),
-    published_posts: await Post.count({where:{status: 'published'}}),
-    draft_posts: await Post.count({where:{status: 'draft'}}),
-    comments: await Comment.count(),
-    pending_comments: await Comment.count({where:{status: 'pending'}}),
+    posts: await Post.count({
+      where: req.user.role === 'admin' ? {} : { authorId: req.user.id }
+    }),
+    published_posts: await Post.count({
+      where: req.user.role === 'admin' 
+        ? { status: 'published' } 
+        : { status: 'published', authorId: req.user.id }
+    }),
+    draft_posts: await Post.count({
+      where: req.user.role === 'admin' 
+        ? { status: 'draft' } 
+        : { status: 'draft', authorId: req.user.id }
+    }),
+    comments: await Comment.count({
+      where: req.user.role === 'admin' ? {} : { authorId: req.user.id }
+    }),
+    pending_comments: await Comment.count({
+      where: req.user.role === 'admin' 
+        ? { status: 'pending' } 
+        : { status: 'pending', authorId: req.user.id }
+    }),
     categories: await Category.count(),
     users: await User.count(),
+   
   }
   res.status(200).render('admin/dashboard',{
     title:"Dashboard",
@@ -232,6 +252,7 @@ exports.getManagePost = catchAsync(async(req, res , next)=>{
 
   const posts = await Post.findAll({
     order:[["createdAt", "DESC"]],
+    where: req.user.role === 'admin' ? {} : { authorId: req.user.id },
     include:[
       {
         model:Category,
@@ -273,6 +294,7 @@ exports.getComments = catchAsync(async(req, res, next)=>{
   // 1) Get comments data from collection
   // const comments = await Comment.find().populate({path: 'post', select:'title slug'}).sort("-createdAt"); 
   const comments = await Comment.findAll({
+    where: req.user.role === 'admin' ? {} : { authorId: req.user.id },
     order:[["createdAt", "DESC"]],
     include:[
       {

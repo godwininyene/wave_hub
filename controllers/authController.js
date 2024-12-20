@@ -145,6 +145,7 @@ exports.isLoggedIn = async(req, res, next) =>{
 
 exports.protectAdminPages = (req, res, next)=>{
     if(!res.locals.user) return res.redirect('/login?message=You must login to continue');
+    req.user = res.locals.user
     next();
 }
 

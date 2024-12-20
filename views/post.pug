@@ -3,7 +3,20 @@ include includes/_relatedPostCard
 include includes/_commentCard
 block  metaDescription
     meta(name='keywords', content=`${post.tags}`)
-    meta(name='description', content=`${post.content.split(" ").slice(0, 200).join(" ")}`)
+    meta(name='description', content=`${post.content.split(" ").slice(0, 50).join(" ")}`)
+    //Facebook Open Graph Tags
+    meta(property="og:title" content=`${post.title}`)
+    meta(property="og:description" content=`${post.content.split(" ").slice(0, 50).join(" ")}`)
+    meta(property="og:image" content=`https://wavehub.com.ng/images/posts/${post.coverImage}`)
+    meta(property="og:url" content=`https://wavehub.com.ng/post/${post.slug}`)
+    meta(property="og:type" content="article")
+    //Twitter Card Meta Tags
+    meta(name='twitter:card', content='summary_large_image')
+    //- meta(name='twitter:site', content='@your_twitter_handle')
+    meta(name='twitter:title', content=post.title)
+    meta(name='twitter:description', content=post.content.split(" ").slice(0, 50).join(" "))
+    meta(name='twitter:image', content=`https://wavehub.com.ng/images/posts/${post.coverImage}`)
+
 block content 
     //Page Main Content Start
    
@@ -60,16 +73,23 @@ block content
                     div(class="my-10")
                         span(class="text-lg inline-block mb-2") Share this article
                         ul(class="flex gap-x-2 items-center")
-                            each platform in ['facebook', 'twitter', 'instagram', 'pinterest']
-                                li
-                                    a(href=`` class="transition-all duration-100 bg-primary hover:bg-primary-light text-xs inline-block text-center w-8 h-8 leading-8 text-white rounded")
-                                        i(class=`fa-brands fa-${platform}`)
+                            li
+                                a(href=`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(`https://wavehub.com.ng/post/${post.slug}`)}` target="_blank" class="transition-all duration-100 bg-primary hover:bg-primary-light text-xs inline-block text-center w-8 h-8 leading-8 text-white rounded")
+                                    i(class="fa-brands fa-facebook-f")
+                            li
+                                a(href=`https://twitter.com/intent/tweet?url=${encodeURIComponent(`https://wavehub.com.ng/post/${post.slug}`)}&text=${encodeURIComponent(post.title)}` target="_blank" class="transition-all duration-100 bg-primary hover:bg-primary-light text-xs inline-block text-center w-8 h-8 leading-8 text-white rounded")
+                                    i(class="fa-brands fa-twitter")
+                           
+                            li
+                                a(href=`https://pinterest.com/pin/create/button/?url=${encodeURIComponent(`https://wavehub.com.ng/post/${post.slug}`)}&media=${encodeURIComponent(post.coverImage)}&description=${encodeURIComponent(post.title)}` target="_blank" class="transition-all duration-100 bg-primary hover:bg-primary-light text-xs inline-block text-center w-8 h-8 leading-8 text-white rounded")
+                                    i(class="fa-brands fa-pinterest-p")
 
 
                     // Comment Form Start
                     div(class="w-full mb-10")
                         form.comment-form(data-id=`${post.id}`)
                             span(class="italic inline-block mb-3 font-semibold") Leave A comment
+                            input(type='hidden' id='authorId' name='authorId' value=`${post.author.id}`)
                             div(class="mb-3")
                                 input(id='comment_author' type="text" placeholder="Enter your name" name="name" class="inline-block w-full px-4 py-3 bg-[#f0f0f0] border border-transparent rounded transition-all duration-100 focus:outline-0 focus:border-primary")
                             div(class="mb-3")

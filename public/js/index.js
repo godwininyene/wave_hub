@@ -36,8 +36,9 @@
       const author = document.querySelector('#comment_author').value;
       const comment = document.querySelector('#comment_content').value;
       const email = document.querySelector('#email').value;
+      const authorId = document.querySelector('#authorId').value;
       const id = e.target.dataset.id; 
-      await createComment(id, {author, email, comment});
+      await createComment(id, {author, email, comment, authorId});
       document.querySelector(".add-comment-btn").innerHTML='';
       document.querySelector(".add-comment-btn").textContent='Submit'
       e.target.reset();
@@ -193,40 +194,43 @@
     };
     navTogglerRef.addEventListener("click", toggleMobileNav);
   
+
     // Change Header background color on scroll
     window.addEventListener("load", () => {
       const banner = document.querySelector(".banner");
-      const bannerScrollHeight = banner ? banner.scrollHeight + 100 : 0;
-      const observer = new IntersectionObserver(
-        (entry) => {
-          window.addEventListener("scroll", () =>
-            entry[0].isIntersecting
-              ? headerRef.classList.remove("active")
-              : headerRef.classList.add("active")
-          );
-  
-          // Hide Header on scroll down and show on scroll up
-          let lastScrollTop = 0;
-          const handleScroll = () => {
-            const currentScrollTop = document.documentElement.scrollTop;
-  
-            currentScrollTop > bannerScrollHeight &&
-            currentScrollTop > lastScrollTop
-              ? headerRef.classList.add("invisible")
-              : headerRef.classList.remove("invisible");
-  
-            lastScrollTop = currentScrollTop <= 0 ? 0 : currentScrollTop;
-          };
-          window.addEventListener("scroll", handleScroll);
-          return () => window.removeEventListener("scroll", handleScroll);
-        },
-        { threshold: [0] }
-      );
-      if (banner !== null) {
-        observer.observe(banner);
-      }
+      const headerRef = document.querySelector(".header");
+
+      if (!banner || !headerRef) return; // Ensure both elements exist
+
+      const bannerOffsetTop = banner.offsetTop + banner.offsetHeight; // Total position where banner ends
+      let lastScrollTop = 0; // Keep track of the last scroll position
+
+      const handleScroll = () => {
+        const currentScrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+
+        // Check if the user scrolled past the banner
+        if (currentScrollTop > bannerOffsetTop) {
+          headerRef.classList.add("invisible");
+          headerRef.classList.remove("visible");
+        } else {
+          headerRef.classList.remove("invisible");
+          headerRef.classList.add("visible");
+        }
+
+        // Check if the user is scrolling up or down
+        if (currentScrollTop > lastScrollTop) {
+          headerRef.classList.add("invisible");
+        } else {
+          headerRef.classList.remove("invisible");
+        }
+
+        lastScrollTop = currentScrollTop <= 0 ? 0 : currentScrollTop; // Reset last scroll position
+      };
+
+      window.addEventListener("scroll", handleScroll);
     });
-    // =========================== End of Header =========================== //
+
+  // =========================== End of Header =========================== //
 
   // =========================== Start of Banner =========================== //
   const handleBannerScroll = () => {
