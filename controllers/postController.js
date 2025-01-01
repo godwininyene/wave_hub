@@ -9,6 +9,7 @@ const multer = require('multer');
 const sharp = require('sharp')
 const slugify = require('slugify')
 const APIFeatures = require('./../utils/apiFeatures');
+const functions = require('./../utils/functions')
 
 
 const multerStorage = multer.memoryStorage()
@@ -28,11 +29,11 @@ const upload = multer({
 
 exports.uploadCoverPhoto =  upload.single('coverImage');
 exports.uploadExtra = upload.single('upload');
-exports.resizeCoverPhoto = (req, res, next)=>{
+exports.resizeCoverPhoto = catchAsync(async(req, res, next)=>{
     if(!req.file) return next();
 
     req.file.filename = `cover-image-${Date.now()}.jpeg`
-    sharp(req.file.buffer)
+    await sharp(req.file.buffer)
     .resize(650, 350, { fit: 'inside' })
     .toFormat('jpeg')
     .jpeg({quality: 60})
@@ -40,7 +41,7 @@ exports.resizeCoverPhoto = (req, res, next)=>{
 
     next();
 
-}
+});
 
 exports.aliasPopularPosts = (req, res, next)=>{
     req.query.limit = '5';
@@ -146,14 +147,7 @@ exports.getPost = catchAsync(async(req, res, next)=>{
     }
 
     // Step 2: Update viewers array and increment view count
-    const viewerIp = req.connection.remoteAddress;
-    const viewers = post.viewers
-    if (!viewers.includes(viewerIp)) {
-        viewers.push(viewerIp);
-        post.setDataValue('viewers', JSON.stringify(viewers)); // Avoid setter hooks
-        post.viewCount += 1;
-        await post.save({ hooks: false }); // Disable to prevent Sequelize from re-calling the getter
-    }
+    functions.hasUserViewedPost(req, post.id)
    
     res.status(200).json({
         status:"success",

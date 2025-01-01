@@ -6,12 +6,10 @@ const {Post, Comment, Category, User} = require('./../models');
 const catchAsync = require('./../utils/catchAsync');
 const AppError = require('../utils/appError');
 const { Op } = require('sequelize');
-const { generateSessionId } = require('../utils/functions');
+const functions = require('./../utils/functions')
 
 
 exports.getOverview = catchAsync(async(req, res, next)=>{
-  const y = generateSessionId(req)
-  console.log(y)
   // 1) Get posts data from collection
   // const posts = await Post.find().populate('category').sort("-createdAt");
   const posts = await Post.findAll({
@@ -114,6 +112,7 @@ exports.getPost = catchAsync(async (req, res, next) => {
   if (!post) {
     return next(new AppError('There is no post with that title.', '', 404));
   }
+
   //Update viewers
   // await Post.findOneAndUpdate({slug:req.params.slug}, {
   //   $addToSet:{viewers: req.connection.remoteAddress},
@@ -121,14 +120,8 @@ exports.getPost = catchAsync(async (req, res, next) => {
   // },{
   //   new:true
   // })
-  const viewerIp = req.connection.remoteAddress;
-  const viewers = post.viewers
-  if (!viewers.includes(viewerIp)) {
-    viewers.push(viewerIp);
-    post.setDataValue('viewers', JSON.stringify(viewers)); // Avoid setter hooks
-    post.viewCount += 1;
-    await post.save({ hooks: false }); // Disable to prevent Sequelize from re-calling the getter
-  }
+  // 
+  functions.hasUserViewedPost(req, post.id)
 
   // 2) Get related posts data from collection
   // const posts = await Post

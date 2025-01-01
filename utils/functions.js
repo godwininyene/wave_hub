@@ -1,37 +1,34 @@
-const uuid = require('uuid');
-// const BrowserFingerprint = require('browser-fingerprint');
+const crypto = require('crypto');
+const Post = require('./../models/Post')
 
-// Initialize the fingerprinting library
-// const fingerprint = new BrowserFingerprint();
-
-// Function to generate a unique session ID
-exports.generateSessionId = req=> {
-  // const fingerprintData = fingerprint.getFingerprint(req);
-  const sessionId = uuid.v4();
-  return sessionId
-  // return `${sessionId}:${fingerprintData}`;
+// Function to generate a unique fingerprint
+const generateFingerPrint = req=> {
+  // Combine data from headers and IP to create a unique identifier
+  const fingerprintData = {
+    userAgent: req.headers['user-agent'] || '',
+    accept: req.headers['accept'] || '',
+    acceptEncoding: req.headers['accept-encoding'] || '',
+    acceptLanguage: req.headers['accept-language'] || '',
+    ip: req.ip || req.connection.remoteAddress || '',
+  };
+  // Create a hash of the combined data
+  const fingerprintString = JSON.stringify(fingerprintData);
+  const fingerprintHash = crypto
+    .createHash('sha256')
+    .update(fingerprintString)
+    .digest('hex');
+  return fingerprintHash
 }
 
 // Function to check if a user has already viewed a post
-async function hasUserViewedPost(req, postId) {
-    const sessionId = generateSessionId(req);
-    const viewedPost = await ViewedPost.findOne({
-      where: {
-        postId,
-        sessionId,
-      },
-    });
-    return viewedPost !== null;
+exports.hasUserViewedPost = async(req, postId)=> {
+  const fingerprintHash = generateFingerPrint(req);
+  const viewedPost = await Post.findByPk(postId);
+  const viewers = viewedPost.viewers
+  if (!viewers.includes(fingerprintHash)) {
+    viewers.push(fingerprintHash);
+    viewedPost.setDataValue('viewers', JSON.stringify(viewers)); // Avoid setter hooks
+    viewedPost.viewCount += 1;
+    await viewedPost.save({ hooks: false }); // Disable to prevent Sequelize from re-calling the getter
+  }
 }
-
-// Route to handle post views
-// app.get('/posts/:postId', async (req, res) => {
-//     const postId = req.params.postId;
-//     if (!await hasUserViewedPost(req, postId)) {
-//       const post = await Post.findByPk(postId);
-//       post.viewCount += 1;
-//       await post.save();
-//       const viewedPost = await ViewedPost.create({ postId, sessionId: generateSessionId(req) });
-//     }
-//     res.send(`You are viewing post ${postId}`);
-//   });
