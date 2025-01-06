@@ -47,6 +47,7 @@ exports.aliasPopularPosts = (req, res, next)=>{
     req.query.limit = '5';
     req.query.sort='-viewCount,-commentCount'
     req.query.fields='title,coverImage,createdAt,viewCount,commentCount,slug'
+    req.query.status='published'
     next();
 }
 
@@ -54,6 +55,7 @@ exports.aliasRecentPosts = (req, res, next)=>{
     req.query.limit = '5';
     req.query.sort='-createdAt'
     req.query.fields='title,coverImage, createdAt ,viewCount ,commentCount,slug'
+    req.query.status='published'
     next();
 }
 
