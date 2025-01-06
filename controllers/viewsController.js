@@ -13,6 +13,7 @@ exports.getOverview = catchAsync(async(req, res, next)=>{
   // 1) Get posts data from collection
   // const posts = await Post.find().populate('category').sort("-createdAt");
   const posts = await Post.findAll({
+    where:{status:"published"},
     include:[
       {
         model:Category,
@@ -36,7 +37,7 @@ exports.getAuthorPosts = catchAsync(async(req, res, next)=>{
   // const author_name = author?.name; // Extracts the name field
 
   const posts = await Post.findAll({
-    where:{authorId: req.params.author_id},
+    where:{authorId: req.params.author_id, status: 'published'},
     order:[["createdAt", "DESC"]],
     include:[
       {model:Category, as: 'category'}
@@ -63,7 +64,7 @@ exports.getPostsByCategory = catchAsync(async(req, res, next)=>{
   // const category_name = category?.name; // Extracts the name field
 
   const posts = await Post.findAll({
-    where:{categoryId : req.params.cat_id},
+    where:{categoryId : req.params.cat_id, status:"published"},
     order:[["createdAt", "DESC"]],
     include:[{model: Category, as:'category'}]
 
