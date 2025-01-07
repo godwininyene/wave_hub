@@ -20,7 +20,7 @@ block content
                             td.p-2.border=comment.comment
                             td.p-2.border.capitalize=comment.status
                             td.p-2.border 
-                            a(href=comment.post ? `/post/${comment.post.slug}` : '#' class='text-blue-600') #{comment.post ? comment.post.title : 'No post'}
+                                a(href=comment.post ? `/post/${comment.post.slug}` : '#' class='text-blue-600') #{comment.post ? comment.post.title : 'No post'}
                             - const date = new Date(comment.createdAt).toLocaleDateString('en-GB', {day: '2-digit',month: 'short',year: 'numeric'})
                             td.p-2.border= date
                             td.p-2.border

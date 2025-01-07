@@ -25,7 +25,7 @@ exports.getOverview = catchAsync(async(req, res, next)=>{
   // 2) Build template
   // 3) Render that template using posts data from 1)
   res.status(200).render('index', {
-    title: 'The latest Articles from Nigeria and Around the World',
+    title: 'Creative Writing, Academic Research, Poetry, Fiction and Latest Trends',
     posts
   });
 });
