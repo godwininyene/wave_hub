@@ -19,5 +19,6 @@ mixin relatedPostCard(post)
                     i(class="fas fa-clock  mr-1  text-primary ")
                     - const date = post.createdAt.toLocaleString('en-us', {day:'numeric', month: 'long', year: 'numeric'})
                     |#{date}
-                p(class="text-left text-xs leading-6 pb-3 font-semibold text-slate-500")
-                    |lorem eloreom eoeooeo eoeifheifheif eifehfiheifheife eiheifheifhef 
+                - const content = `${post.content.split(" ").slice(0, 23).join(" ")}...`
+                p(class="text-left text-xs leading-6 pb-3 font-semibold text-slate-500")!=content
+              

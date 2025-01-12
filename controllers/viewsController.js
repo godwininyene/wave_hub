@@ -131,8 +131,10 @@ exports.getPost = catchAsync(async (req, res, next) => {
   const posts = await Post.findAll({
     where: {
       slug: { [Op.ne]: req.params.slug },  
-      categoryId: post.category.id
+      categoryId: post.category.id,
+      status:'published'
     },
+    order:[["createdAt", "DESC"]],
     include: [
       {
         model: Category,         
