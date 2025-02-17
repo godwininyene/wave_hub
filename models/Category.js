@@ -9,6 +9,11 @@ class Category extends Model{
 Category.init(
     //Model Attributes
     {
+        id: {
+            type: DataTypes.INTEGER,
+            autoIncrement: true,
+            primaryKey: true
+        },
         name:{
             type:DataTypes.STRING,
             allowNull:false,
@@ -31,5 +36,10 @@ Category.init(
         }
     }
 );
+
+
+Category.sync({ alter: true })
+.then(() => console.log('Tables created successfully!'))
+.catch(error => console.error('Error creating tables:', error));
 
 module.exports = Category

@@ -19,6 +19,11 @@ class User extends Model{
 User.init(
     //Model Attriubtes
     {
+        id: {
+            type: DataTypes.INTEGER,
+            autoIncrement: true,
+            primaryKey: true
+        },
        
         name:{
             type:DataTypes.STRING,
@@ -112,5 +117,7 @@ User.init(
     }
 )
 
-
+User.sync({ alter: true })
+.then(() => console.log('Tables created successfully!'))
+.catch(error => console.error('Error creating tables:', error));
 module.exports = User;

@@ -67,4 +67,8 @@ Comment.init(
         modelName:"Comment"
     }
 );
+
+Comment.sync({ alter: true })
+.then(() => console.log('Tables created successfully!'))
+.catch(error => console.error('Error creating tables:', error));
 module.exports = Comment;
