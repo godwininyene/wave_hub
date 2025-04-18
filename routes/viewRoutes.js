@@ -21,6 +21,7 @@ router.get('/dashboard', viewsController.getDashboard);
 router.get('/manage_posts', viewsController.getManagePost);
 router.get('/manage_categories', viewsController.getCategories);
 router.get('/manage_comments', viewsController.getComments);
+router.get('/manage_subscribers', viewsController.getSubscribers);
 router.get('/manage_users', viewsController.getUsers);
 router.get('/me', viewsController.getAccount);
 

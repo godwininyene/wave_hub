@@ -7,6 +7,7 @@ const viewRouter = require('./routes/viewRoutes');
 const postRouter = require('./routes/postRoutes');
 const categoryRouter = require('./routes/categoryRoutes');
 const commentRouter = require('./routes/commentRoutes');
+const subscriberRouter = require('./routes/subscriberRoutes');
 const AppError = require('./utils/appError');
 const cookieParser = require('cookie-parser')
 
@@ -32,7 +33,8 @@ app.use((req, res, next)=>{
 app.use('/api/v1/users', userRouter);
 app.use('/api/v1/categories', categoryRouter)
 app.use('/api/v1/posts', postRouter);
-app.use('/api/v1/comments', commentRouter)
+app.use('/api/v1/comments', commentRouter);
+app.use('/api/v1/subscribers', subscriberRouter);
 app.use('/', viewRouter);
 
 app.all('*', (req, res, next)=>{

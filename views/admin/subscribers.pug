@@ -1,0 +1,35 @@
+extends base 
+block content
+    .w-full.overflow-x-scroll
+        table.w-full.border.border-collapse.border-gray-200
+            thead
+                tr.border
+                   
+                    th.py-1.px-3 Name
+                    th.py-1.px-3 Email
+                    th.py-1.px-3 Action
+            tbody
+                if subscribers.length > 0
+                    each subscriber in subscribers
+                        tr.text-center(class='hover:bg-gray-100')
+                            td.p-2.border=subscriber.name
+                            td.p-2.border=subscriber.email
+                        
+                            //- td.p-2.border 
+                            //-     a(href=comment.post ? `/post/${comment.post.slug}` : '#' class='text-blue-600') #{comment.post ? comment.post.title : 'No post'}
+                            //- - const date = new Date(comment.createdAt).toLocaleDateString('en-GB', {day: '2-digit',month: 'short',year: 'numeric'})
+                            //- td.p-2.border= date
+                            //- td.p-2.border
+                            //-     if (comment.status === 'pending' || comment.status === 'disapproved')
+                            //-         button.py-1.px-2.text-primary.comment-approval-btn(data-status='approved', data-id=`${comment.id}`)
+                            //-             i.fas.fa-circle-check
+                            //-     else 
+                            //-     button.py-1.px-2.text-red-500.comment-approval-btn(data-status='disapproved', data-id=`${comment.id}`)
+                            //-         i.fas.fa-times-circle
+
+                            //-     button.py-1.px-2.text-red-500.delete-comment-btn(data-id=`${comment.id}` type='button')
+                            //-         i.fas.fa-trash-alt
+                else    
+                    tr
+                        td.px-2.py-4.whitespace-nowrap.text-sm.italic.flex.items-center.justify-center
+                            p This table is empty.

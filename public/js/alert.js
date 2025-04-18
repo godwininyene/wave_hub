@@ -13,7 +13,7 @@ export const showAlert = (type, msg) => {
     Toastify({
         text: msg,
         className: "info",
-        duration: 3000,
+        duration: 7000,
         newWindow: true,
         close: true,
         gravity: "top", // `top` or `bottom`

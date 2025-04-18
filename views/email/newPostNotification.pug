@@ -1,0 +1,28 @@
+extends baseEmail
+
+block content
+  strong Hi #{firstName},
+
+  p We’ve just published a new post on our blog, and we thought you wouldn’t want to miss it! 🚀
+
+  strong Title: #{postTitle}  
+  br
+  br
+  strong Category: #{postCategory}  
+
+  p Here’s a sneak peek:  
+  blockquote #{postExcerpt}
+
+  table.btn.btn-primary(role='presentation', border='0', cellpadding='0', cellspacing='0')
+    tbody
+      tr
+        td(align='center')
+          table(role='presentation', border='0', cellpadding='0', cellspacing='0')
+            tbody
+              tr
+                td
+                  a(href=`${postUrl}`, target='_blank') Read Now
+
+  p We’d love to hear your thoughts, so feel free to leave a comment or share with your friends!
+
+  strong - Godwin Inyene, Blog Founder

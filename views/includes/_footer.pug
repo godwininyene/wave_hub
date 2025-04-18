@@ -97,7 +97,8 @@ footer(class='pt-28 pb-20 sticky bottom-0 z-[1] bg-dark text-white')
                         a(href='/privacy-policy' class='link') Privacy policy
             div(class='md:w-2/4 text-center md:text-left mb-4 md:mb-0')
                 //Copyright
-                p(class='text-white/75') &copy; 2024 WaveHub. All rights reserved.
+                -const year = new Date().getFullYear()
+                p(class='text-white/75') &copy; 2024 - #{year} WaveHub. All rights reserved.
             div(class='md:w-2/4 text-center md:text-right')
                 div(class='content mb-4 lg:mb-0')
                     h3(class='text-left font-semibold text-white mb-5 pb-5 border-b border-b-slate-200') Subscribe
@@ -106,13 +107,21 @@ footer(class='pt-28 pb-20 sticky bottom-0 z-[1] bg-dark text-white')
                             |Want to be notified when we launch a new article?
                             |Just sign up and we'll send you a notification by email.
 
-                        form(class='mt-5')
-                            div(class='flex gap-x-2')
+                        form(class='subscription-form mt-5')
+                            div(class='mb-4')
+                                input( 
+                                    type="text" 
+                                    name='name' 
+                                    id='name'
+                                    placeholder='Enter your name'
+                                    class='h-12 px-5 bg- bg-gray-800 transition-all duration-300 focus:outline-0 border border-transparent focus:border-primary text-white w-full rounded')
+                            div(class='mb-4')
                                 input( 
                                     type="email" 
                                     name='email' 
-                                    placeholder='Enter your Email'
-                                    class='h-12 px-5 bg- bg-gray-800 transition-all duration-300 focus:outline-0 border border-transparent focus:border-primary text-white w-9/12 rounded')
-
-                                button(class='transition-all duration-100 hover:bg-primary-light bg-primary rounded cursor-pointer text-white h-12 w-1/4') Submit
+                                    id='email'
+                                    placeholder='Enter your email'
+                                    class='h-12 px-5 bg- bg-gray-800 transition-all duration-300 focus:outline-0 border border-transparent focus:border-primary text-white w-full rounded')
+                            div(class='flex justify-end')
+                                button(class='subscription-btn transition-all duration-100 hover:bg-primary-light bg-primary rounded cursor-pointer text-white h-12 w-1/4') Submit
 

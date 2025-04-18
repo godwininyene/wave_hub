@@ -1,8 +1,10 @@
 const catchAsync = require('./../utils/catchAsync');
+const Email = require('./../utils/email');
 // const Post = require('./../models/postModel')
 const Post = require('./../models/Post')
 const User = require('./../models/User')
 const Category = require('../models/Category');
+const Subscriber = require('./../models/Subscriber')
 const Comment = require('./../models/Comment')
 const AppError = require('./../utils/appError')
 const multer = require('multer');
@@ -59,21 +61,55 @@ exports.aliasRecentPosts = (req, res, next)=>{
     next();
 }
 
-exports.createPost = catchAsync(async(req, res, next)=>{
 
-    // req.body.author = req.user._id;
+exports.createPost = catchAsync(async (req, res, next) => {
+    // Assign post author
     req.body.authorId = req.user.id;
- 
-    if(req.file) req.body.coverImage = req.file.filename;
-   
-    const post = await Post.create(req.body)
+
+    // Attach cover image if available
+    if (req.file) req.body.coverImage = req.file.filename;
+
+    // Automatically generate an excerpt 
+    const excerpt = req.body.content.split(" ").slice(0, 30).join(" ") + "...";
+    
+    // Create new post
+    const post = await Post.create(req.body);
+
+    // Fetch the actual category name
+    const category = await Category.findByPk(post.categoryId); 
+    const categoryName = category ? category.name : "Uncategorized"; // Default if not found
+
+    // Fetch all subscribers
+    const subscribers = await Subscriber.findAll({attributes: ['name', 'email']});
+    // Send email notification asynchronously (doesn't block response)
+    if (subscribers.length > 0) {
+        const postUrl = `https://wavehub.com.ng/post/${post.slug}`;
+        const emailService = new Email(subscribers, postUrl, excerpt, post.title, categoryName);
+        emailService.sendPostNotification();
+    }
+    // Send success response
     res.status(200).json({
-        status:"success",
-        data:{
-            post
-        }
-    })
+        status: "success",
+        data: { post }
+    });
 });
+
+
+// exports.createPost = catchAsync(async(req, res, next)=>{
+
+//     // req.body.author = req.user._id;
+//     req.body.authorId = req.user.id;
+ 
+//     if(req.file) req.body.coverImage = req.file.filename;
+   
+//     const post = await Post.create(req.body)
+//     res.status(200).json({
+//         status:"success",
+//         data:{
+//             post
+//         }
+//     })
+// });
 
 
 exports.getAllPosts = catchAsync(async(req, res, next) =>{

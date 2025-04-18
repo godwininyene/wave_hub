@@ -38,8 +38,8 @@ Category.init(
 );
 
 
-Category.sync({ alter: true })
-.then(() => console.log('Tables created successfully!'))
-.catch(error => console.error('Error creating tables:', error));
+// Category.sync({ alter: true })
+// .then(() => console.log('Tables created successfully!'))
+// .catch(error => console.error('Error creating tables:', error));
 
 module.exports = Category

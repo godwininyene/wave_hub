@@ -2,7 +2,7 @@
 // const Comment = require('../models/commentModel');
 // const User = require('./../models/userModel')
 // const Category = require('../models/categoryModel');
-const {Post, Comment, Category, User} = require('./../models');
+const {Post, Comment, Category, User, Subscriber} = require('./../models');
 const catchAsync = require('./../utils/catchAsync');
 const AppError = require('../utils/appError');
 const { Op } = require('sequelize');
@@ -216,6 +216,8 @@ exports.getDashboard = async(req, res, next)=>{
         : { status: 'pending', authorId: req.user.id }
     }),
     categories: await Category.count(),
+
+    subscribers: await Subscriber.count(),
     users: await User.count(),
    
   }
@@ -304,6 +306,14 @@ exports.getComments = catchAsync(async(req, res, next)=>{
   res.status(200).render('admin/comments',{
     title:'Manage Comments',
     comments
+  })
+});
+
+exports.getSubscribers = catchAsync(async(req, res, next)=>{
+  const subscribers = await Subscriber.findAll({  order:[["createdAt", "DESC"]],});
+  res.status(200).render('admin/subscribers',{
+    subscribers,
+    title:"Manage Subscribers"
   })
 });
 

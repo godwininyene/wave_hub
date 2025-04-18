@@ -4,6 +4,7 @@
   import { getSidebarPosts } from "./sidebarPosts";
   import { createComment } from "./comment";
   import { getCategories } from "./category";
+  import { createSubscription } from "./subscription";
   // =========================== Init AOS =========================== //
   AOS.init({
     once: true,
@@ -44,7 +45,28 @@
       e.target.reset();
     })
   }
-  // =========================== End of Comment Form =========================== //
+  // =========================== Start of Comment Form =========================== //
+
+  // =========================== Start of Subscription Form =========================== //
+  document.addEventListener("DOMContentLoaded",  ()=> {
+    const forms = document.querySelectorAll(".subscription-form"); // Select both forms by class
+    forms.forEach((form) => {
+      form.addEventListener("submit",  async event=> {
+        event.preventDefault();
+        const btn = form.querySelector('.subscription-btn');
+        btn.innerHTML+=`<i class="fas fa-circle-notch animate-spin duration-1000">`;
+        const name = form.querySelector("#name").value;
+        const email = form.querySelector("#email").value;
+        await createSubscription({name, email});
+        btn.textContent='Submit';
+        event.target.reset();
+      });
+    });
+  });
+
+  // =========================== End of Subscription Form =========================== //
+
+  
 
 
   // =========================== Start of Sidebar Posts =========================== //

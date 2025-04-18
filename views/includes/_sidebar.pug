@@ -112,13 +112,24 @@ div(class='sidebar-content  h-full lg:border-l lg:border-l-slate-200 sticky top-
                     |Want to be notified when we launch a new article?
                     |Just sign up and we'll send you a notification by email.
                 
-                form(action="" class='mt-5')
-                    div(class='flex gap-x-2')
-                        input(
-                            type="email" 
-                            name='email' 
-                            placeholder='Enter your Email'
-                            class='h-12 px-5 bg- bg-gray-800 transition-all duration-300 focus:outline-0 border border-transparent focus:border-primary text-white w-9/12 rounded'
-                        )
-                        button(class='transition-all duration-100 hover:bg-primary-light bg-primary rounded cursor-pointer text-white h-12 w-1/4') Submit
+                form(action="" class='subscription-form mt-5')
+                  div(class='mb-4')
+                    input(
+                      type="text" 
+                      name='name' 
+                      placeholder='Enter your name'
+                      id='name'
+                      class='h-12 px-5 bg- bg-gray-800 transition-all duration-300 focus:outline-0 border border-transparent focus:border-primary text-white w-full rounded'
+                    )
+
+                  div(class='mb-4')
+                    input(
+                      type="email" 
+                      name='email' 
+                      id='email'
+                      placeholder='Enter your email'
+                      class='h-12 px-5 bg- bg-gray-800 transition-all duration-300 focus:outline-0 border border-transparent focus:border-primary text-white w-full rounded'
+                    )
+                  div(class='flex justify-end')
+                    button(class='subscription-btn transition-all duration-100 hover:bg-primary-light bg-primary rounded cursor-pointer text-white h-12 w-1/4') Submit
     //Subscription Widget End
